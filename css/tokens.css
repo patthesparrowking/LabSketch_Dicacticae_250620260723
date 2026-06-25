@@ -1,0 +1,23 @@
+:root {
+  --color-bg: #e9e4d8;
+  --color-surface: #f8f3ea;
+  --color-surface-soft: #f4ece1;
+  --color-primary: #18331f;
+  --color-primary-soft: #244a30;
+  --color-accent: #e1b24b;
+  --color-border: #af965c;
+  --color-text: #18331f;
+  --color-muted: #756b5a;
+  --color-white: #ffffff;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --space-xs: 6px;
+  --space-sm: 10px;
+  --space-md: 16px;
+  --space-lg: 24px;
+
+  --shadow-soft: 0 8px 24px rgba(24, 51, 31, 0.12);
+}

@@ -9,6 +9,9 @@ import { saveProject, loadProjectFromFile } from "./project.js";
 import { initPropertiesPanel } from "./properties.js";
 import { toggleGrid, toggleSnap } from "./grid.js";
 import { exportPng } from "./pngExport.js";
+import { initUiControls } from "./ui.js";
+import { initGridUi } from "./grid.js";
+import { updateStatusBar } from "./status.js";
 
 const smallerBtn = document.getElementById("smallerBtn");
 const biggerBtn = document.getElementById("biggerBtn");
@@ -24,10 +27,20 @@ const loadProjectInput = document.getElementById("loadProjectInput");
 const toggleGridBtn = document.getElementById("toggleGridBtn");
 const toggleSnapBtn = document.getElementById("toggleSnapBtn");
 const exportPngBtn = document.getElementById("exportPngBtn");
+const assetSearchInput = document.getElementById("assetSearchInput");
 
 renderToolButtons();
 
+assetSearchInput.addEventListener("input", () => {
+  renderToolButtons(assetSearchInput.value);
+});
+
 initPropertiesPanel();
+
+initUiControls();
+
+initGridUi();
+updateStatusBar();
 
 smallerBtn.addEventListener("click", () => {
   scaleSelected(-0.1);
@@ -107,13 +120,28 @@ document.addEventListener("keydown", event => {
   }
 });
 
-function renderToolButtons() {
+function renderToolButtons(searchTerm = "") {
   const toolList = document.getElementById("toolList");
   toolList.innerHTML = "";
 
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  const filteredItems = svgLibrary.filter(item => {
+    const searchableText = [
+      item.id,
+      item.label,
+      item.station,
+      ...(item.tags || [])
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return searchableText.includes(normalizedSearch);
+  });
+
   const stations = {};
 
-  svgLibrary.forEach(item => {
+  filteredItems.forEach(item => {
     const stationName = item.station || "Allgemein";
 
     if (!stations[stationName]) {
@@ -123,20 +151,40 @@ function renderToolButtons() {
     stations[stationName].push(item);
   });
 
+  if (filteredItems.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "empty-message";
+    emptyMessage.textContent = "Keine passenden Objekte gefunden.";
+    toolList.appendChild(emptyMessage);
+    return;
+  }
+
   Object.entries(stations).forEach(([stationName, items]) => {
     const stationGroup = document.createElement("section");
     stationGroup.className = "station-group";
 
-    const heading = document.createElement("h2");
+    const heading = document.createElement("button");
     heading.className = "station-heading";
-    heading.textContent = stationName;
+    heading.type = "button";
+    heading.textContent = `▾ ${stationName}`;
 
-    stationGroup.appendChild(heading);
+    const stationItems = document.createElement("div");
+    stationItems.className = "station-items";
 
     items.forEach(item => {
-      stationGroup.appendChild(createToolRow(item));
+      stationItems.appendChild(createToolRow(item));
     });
 
+    heading.addEventListener("click", () => {
+      stationGroup.classList.toggle("is-collapsed");
+
+      heading.textContent = stationGroup.classList.contains("is-collapsed")
+        ? `▸ ${stationName}`
+        : `▾ ${stationName}`;
+    });
+
+    stationGroup.appendChild(heading);
+    stationGroup.appendChild(stationItems);
     toolList.appendChild(stationGroup);
   });
 }

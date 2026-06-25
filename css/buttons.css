@@ -1,0 +1,70 @@
+button {
+  font: inherit;
+}
+
+.btn,
+.icon-btn,
+.tool,
+.tool-download {
+  border: 1px solid rgba(175, 150, 92, 0.7);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-soft);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.btn {
+  padding: 8px 12px;
+}
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  font-size: 18px;
+}
+
+.btn:hover,
+.icon-btn:hover,
+.tool:hover,
+.tool-download:hover {
+  background: var(--color-accent);
+}
+
+.btn.primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  font-weight: 700;
+}
+
+.tool {
+  flex: 1;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.tool-thumbnail {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  background: white;
+  border-radius: 6px;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.tool-download {
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.btn.is-active,
+.icon-btn.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  font-weight: 700;
+}

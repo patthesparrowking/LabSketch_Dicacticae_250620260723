@@ -6,86 +6,123 @@
 
   <title>LabSketch Didacticae</title>
 
-  <link rel="stylesheet" href="css/main.css" />
-  <link rel="stylesheet" href="css/sidebar.css" />
-  <link rel="stylesheet" href="css/toolbar.css" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/panels.css" />
+  <link rel="stylesheet" href="css/buttons.css" />
   <link rel="stylesheet" href="css/canvas.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
 </head>
+
 <body>
+  <div class="app-shell">
 
-  <nav class="topnav">
-      <h1>LabSketch</h1>
-    <p class="subtitle">Didacticae</p>
-  </nav>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-title">LabSketch</span>
+        <span class="brand-subtitle">Didacticae</span>
+      </div>
 
-  <aside class="sidebar">
-    <div id="toolList" class="tool-list"></div>
-    <!-- <button class="tool" data-object="label">Beschriftung</button> -->
-    
-  </aside>
+<div class="topbar-actions">
+  <button id="toggleAssetsBtn" class="btn">Objekte</button>
+  <button id="togglePropertiesBtn" class="btn">Eigenschaften</button>
 
-  <main class="workspace">
-
-    <div class="toolbar">
-      <button id="smallerBtn">− kleiner</button>
-      <button id="biggerBtn">+ größer</button>
-      <button id="rotateLeftBtn">↺ drehen</button>
-      <button id="rotateRightBtn">↻ drehen</button>
-      <button id="duplicateBtn">⧉ duplizieren</button>
-      <button id="frontBtn">nach vorne</button>
-      <button id="backBtn">nach hinten</button>
-      <button id="exportSvgBtn">SVG exportieren</button>
-      <button id="exportPngBtn">PNG exportieren</button>
-      <button id="saveProjectBtn">Projekt speichern</button>
-      <button id="loadProjectBtn">Projekt laden</button>
-      <input id="loadProjectInput" type="file" accept=".json" hidden>
-      <button id="toggleGridBtn">Raster an/aus</button>
-      <button id="toggleSnapBtn">Snap an/aus</button>
-    </div>
-
-    <div class="properties-panel">
-  <label>
-    X
-    <input id="posXInput" type="number">
-  </label>
-
-  <label>
-    Y
-    <input id="posYInput" type="number">
-  </label>
-
-  <label>
-    Größe
-    <input id="scaleInput" type="number" step="0.1" min="0.1">
-  </label>
-
-  <label>
-    Rotation
-    <input id="rotationInput" type="number">
-  </label>
-
-  <label id="textProperty">
-    Text
-    <input id="textInput" type="text">
-  </label>
+  <button id="saveProjectBtn" class="btn">Projekt speichern</button>
+  <button id="loadProjectBtn" class="btn">Projekt laden</button>
+  <button id="exportSvgBtn" class="btn">SVG</button>
+  <button id="exportPngBtn" class="btn primary">PNG</button>
+  <input id="loadProjectInput" type="file" accept=".json" hidden>
 </div>
+    </header>
 
-<svg id="canvas" viewBox="0 0 1000 700">
-  <rect id="background" width="1000" height="700" fill="#ffffff" />
+    <main class="main-layout">
 
-  <defs>
-    <pattern id="gridPattern" width="25" height="25" patternUnits="userSpaceOnUse">
-      <path d="M 25 0 L 0 0 0 25"
-            fill="none"
-            stroke="#d8cfaF"
-            stroke-width="1" />
-    </pattern>
-  </defs>
+      <aside class="asset-panel">
+        <div class="panel-header">
+          <h2>Objekte</h2>
+          <p>Laborgeräte, Stationen und Symbole</p>
+        </div>
 
-  <rect id="grid" width="1000" height="700" fill="url(#gridPattern)" opacity="0.45" />
-</svg>
+        <div class="asset-search">
+            <input id="assetSearchInput" type="search" placeholder="Objekte suchen …">
+        </div>
 
-  </main>
+        <div id="toolList" class="tool-list"></div>
+      </aside>
+
+      <section class="canvas-area">
+        <div class="canvas-toolbar">
+          <button id="smallerBtn" class="icon-btn">−</button>
+          <button id="biggerBtn" class="icon-btn">+</button>
+          <button id="rotateLeftBtn" class="icon-btn">↺</button>
+          <button id="rotateRightBtn" class="icon-btn">↻</button>
+          <button id="duplicateBtn" class="btn">Duplizieren</button>
+          <button id="frontBtn" class="btn">Nach vorne</button>
+          <button id="backBtn" class="btn">Nach hinten</button>
+          <button id="toggleGridBtn" class="btn">Raster</button>
+          <button id="toggleSnapBtn" class="btn">Snap</button>
+        </div>
+
+        <div class="canvas-wrapper">
+          <svg id="canvas" viewBox="0 0 1000 700">
+            <rect id="background" width="1000" height="700" fill="#ffffff" />
+
+            <defs>
+              <pattern id="gridPattern" width="25" height="25" patternUnits="userSpaceOnUse">
+                <path d="M 25 0 L 0 0 0 25"
+                      fill="none"
+                      stroke="#d8cfaf"
+                      stroke-width="1" />
+              </pattern>
+            </defs>
+
+            <rect id="grid" width="1000" height="700" fill="url(#gridPattern)" opacity="0.45" />
+          </svg>
+        </div>
+
+        <div class="statusbar">
+  <span id="selectedStatus">Ausgewählt: nichts</span>
+  <span id="gridStatus">Raster: an</span>
+  <span id="snapStatus">Snap: an</span>
+</div>
+      </section>
+
+      <aside class="properties-panel">
+        <div class="panel-header">
+          <h2>Eigenschaften</h2>
+          <p>Ausgewähltes Objekt bearbeiten</p>
+        </div>
+
+        <div class="property-grid">
+          <label>
+            X
+            <input id="posXInput" type="number">
+          </label>
+
+          <label>
+            Y
+            <input id="posYInput" type="number">
+          </label>
+
+          <label>
+            Größe
+            <input id="scaleInput" type="number" step="0.1" min="0.1">
+          </label>
+
+          <label>
+            Rotation
+            <input id="rotationInput" type="number">
+          </label>
+
+          <label id="textProperty" class="full">
+            Text
+            <input id="textInput" type="text">
+          </label>
+        </div>
+      </aside>
+
+    </main>
+  </div>
 
   <script type="module" src="js/app.js"></script>
 </body>
