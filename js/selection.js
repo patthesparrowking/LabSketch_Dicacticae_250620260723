@@ -1,3 +1,5 @@
+import { updatePropertiesPanel, clearPropertiesPanel } from "./properties.js";
+
 let selectedElement = null;
 
 export function selectElement(element) {
@@ -5,6 +7,8 @@ export function selectElement(element) {
 
   selectedElement = element;
   selectedElement.classList.add("selected");
+
+  updatePropertiesPanel();
 }
 
 export function clearSelection() {
@@ -13,6 +17,7 @@ export function clearSelection() {
   }
 
   selectedElement = null;
+  clearPropertiesPanel();
 }
 
 export function getSelectedElement() {

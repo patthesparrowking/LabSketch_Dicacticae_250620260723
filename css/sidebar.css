@@ -23,7 +23,7 @@
   display: flex;
   gap: 8px;
   margin-bottom: 12px;
-    border: 1px solid white;
+    border: 1px solid #af965c;
     border-radius: 10px;
     overflow: hidden;
 
@@ -71,8 +71,8 @@
 }
 
 .tool-thumbnail {
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -81,3 +81,21 @@
   background: #e1b24b;
 }
 
+.tool-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.station-group {
+  border-top: 1px solid rgba(243, 218, 177, 0.25);
+  padding-top: 12px;
+}
+
+.station-heading {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #e1b24b;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}

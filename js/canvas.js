@@ -1,5 +1,6 @@
 import { selectElement } from "./selection.js";
 import { updateTransform } from "./transform.js";
+import { snapValue } from "./grid.js";
 
 export const canvas = document.getElementById("canvas");
 
@@ -37,10 +38,13 @@ function drag(event) {
 
   const point = getMousePosition(event);
 
-  draggedElement.dataset.x = point.x - offsetX;
-  draggedElement.dataset.y = point.y - offsetY;
+draggedElement.dataset.x = snapValue(point.x - offsetX);
+draggedElement.dataset.y = snapValue(point.y - offsetY);
 
   updateTransform(draggedElement);
+  import("./properties.js").then(module => {
+  module.updatePropertiesPanel();
+});
 }
 
 function endDrag(event) {

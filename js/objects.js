@@ -1,4 +1,5 @@
 import { svgLibrary } from "./library.js";
+import { makeTextEditable } from "./text.js";
 
 export async function createObject(type) {
 
@@ -49,17 +50,17 @@ async function createExternalSvg(path) {
 }
 
 function createLabel() {
-
   const text = createSvgElement("text");
 
   text.textContent = "Beschriftung";
 
   text.setAttribute("x", "0");
   text.setAttribute("y", "0");
-
   text.setAttribute("font-size", "32");
   text.setAttribute("font-family", "Arial");
   text.setAttribute("fill", "#18331f");
+
+  makeTextEditable(text);
 
   return text;
 }

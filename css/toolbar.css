@@ -17,3 +17,29 @@
 .toolbar button:hover {
   background: #e1b24b;
 }
+
+.properties-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid #af965c;
+  border-radius: 10px;
+  background: #f4ece1;
+}
+
+.properties-panel label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #18331f;
+  font-size: 14px;
+}
+
+.properties-panel input {
+  width: 80px;
+  padding: 5px;
+  border: 1px solid #af965c;
+  border-radius: 6px;
+}
