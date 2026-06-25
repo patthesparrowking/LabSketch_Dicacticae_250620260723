@@ -1,0 +1,67 @@
+.sidebar {
+  width: 400px;
+  padding: 20px;
+  background: #18331f;
+  color: #f3dab1;
+    overflow-y: scroll;
+}
+
+.sidebar h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.subtitle {
+  margin-top: 4px;
+  margin-bottom: 28px;
+  color: #e1b24b;
+  letter-spacing: 1px;
+}
+
+.tool-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+    border: 1px solid white;
+
+}
+
+.tool-row .tool {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.tool-download {
+  width: 42px;
+  border: 1px solid #af965c;
+  /* border-radius: 10px; */
+  background: #f4ece1;
+  background: inherit;
+  color: #18331f;
+  color: inherit;
+  cursor: pointer;
+}
+
+.tool-download:hover {
+  background: #e1b24b;
+}
+
+.tool {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #af965c;
+  border: none;
+  /* border-radius: 10px; */
+  background: #f4ece1;
+  background: inherit;
+  color: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.tool:hover {
+  background: #e1b24b;
+}
+

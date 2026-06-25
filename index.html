@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>LabSketch Didacticae</title>
+
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/toolbar.css" />
+  <link rel="stylesheet" href="css/canvas.css" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h1>LabSketch</h1>
+    <p class="subtitle">Didacticae</p>
+
+    <div id="toolList" class="tool-list"></div>
+    <button class="tool" data-object="label">Beschriftung</button>
+    
+  </aside>
+
+  <main class="workspace">
+
+    <div class="toolbar">
+      <button id="smallerBtn">− kleiner</button>
+      <button id="biggerBtn">+ größer</button>
+      <button id="rotateLeftBtn">↺ drehen</button>
+      <button id="rotateRightBtn">↻ drehen</button>
+      <button id="duplicateBtn">⧉ duplizieren</button>
+      <button id="frontBtn">nach vorne</button>
+      <button id="backBtn">nach hinten</button>
+      <button id="exportSvgBtn">SVG exportieren</button>
+    </div>
+
+    <svg id="canvas" viewBox="0 0 1000 700">
+      <rect id="background" width="1000" height="700" fill="#ffffff" />
+    </svg>
+
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
