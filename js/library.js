@@ -120,11 +120,6 @@ export const svgLibrary = [
     path: "assets/svg/Uhrglas.svg"
   },
   {
-    id: "Wasser",
-    label: "Wasser",
-    path: "assets/svg/Wasser.svg"
-  },
-  {
     id: "Wasser_Blau",
     label: "Wasser (Blau)",
     path: "assets/svg/Wasser_Blau.svg"
