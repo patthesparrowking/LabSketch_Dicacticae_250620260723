@@ -5,6 +5,16 @@ export const svgLibrary = [
     path: "assets/svg/Calciumchlorid-Lösung.svg"
   },
   {
+    id: "Daphnia_Magna",
+    label: "Daphnia Magna",
+    path: "assets/svg/Daphnia_Magna.svg"
+  },
+  {
+    id: "Daphnien_Becherglas",
+    label: "Daphnien (Becherglas)",
+    path: "assets/svg/Daphnien_Becherglas.svg"
+  },
+  {
     id: "Deckgläschen",
     label: "Deckgläschen",
     path: "assets/svg/Deckgläschen.svg"
