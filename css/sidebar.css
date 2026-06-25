@@ -4,6 +4,7 @@
   background: #18331f;
   color: #f3dab1;
     overflow-y: scroll;
+    margin-top: 100px;
 }
 
 .sidebar h1 {
@@ -23,6 +24,8 @@
   gap: 8px;
   margin-bottom: 12px;
     border: 1px solid white;
+    border-radius: 10px;
+    overflow: hidden;
 
 }
 
@@ -32,8 +35,10 @@
 }
 
 .tool-download {
-  width: 42px;
+  width: 62px;
   border: 1px solid #af965c;
+  border: none;
+  border-left: 1px solid #af965c;
   /* border-radius: 10px; */
   background: #f4ece1;
   background: inherit;
@@ -59,6 +64,17 @@
   font-size: 15px;
   cursor: pointer;
   text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.tool-thumbnail {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .tool:hover {

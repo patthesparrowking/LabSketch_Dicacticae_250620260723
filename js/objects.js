@@ -2,12 +2,12 @@ import { svgLibrary } from "./library.js";
 
 export async function createObject(type) {
 
-  // Textobjekt wird intern erzeugt
+
   if (type === "label") {
     return createLabel();
   }
 
-  // SVG-Objekt in Bibliothek suchen
+
   const item = svgLibrary.find(entry => entry.id === type);
 
   if (item) {
@@ -38,7 +38,7 @@ async function createExternalSvg(path) {
 
   const wrapper = createSvgElement("g");
 
-  // Alle Elemente des SVG in eine Gruppe übernehmen
+
   Array.from(originalSvg.children).forEach(child => {
     wrapper.appendChild(
       document.importNode(child, true)

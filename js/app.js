@@ -16,7 +16,16 @@ toolRow.className = "tool-row";
 const button = document.createElement("button");
 button.className = "tool";
 button.dataset.object = item.id;
-button.textContent = item.label;
+const thumbnail = document.createElement("img");
+thumbnail.className = "tool-thumbnail";
+thumbnail.src = item.path;
+thumbnail.alt = item.label;
+
+const label = document.createElement("span");
+label.textContent = item.label;
+
+button.appendChild(thumbnail);
+button.appendChild(label);
 
 const downloadButton = document.createElement("button");
 downloadButton.className = "tool-download";

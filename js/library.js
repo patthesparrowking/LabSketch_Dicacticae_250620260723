@@ -1,16 +1,16 @@
 export const svgLibrary = [
   {
-    id: "deckgläschen",
-    label: "Deckgläschen",
-    path: "assets/svg/Deckgläschen.svg"
-  },
-  {
     id: "Calciumchlorid-Lösung",
     label: "Calciumchlorid-Lösung",
     path: "assets/svg/Calciumchlorid-Lösung.svg"
   },
   {
-    id: "dichteflasche",
+    id: "Deckgläschen",
+    label: "Deckgläschen",
+    path: "assets/svg/Deckgläschen.svg"
+  },
+  {
+    id: "Dichteflasche",
     label: "Dichteflasche",
     path: "assets/svg/Dichteflasche.svg"
   },
@@ -20,14 +20,24 @@ export const svgLibrary = [
     path: "assets/svg/Eppendorf-Pipette.svg"
   },
   {
-    id: "Ethanol",
-    label: "Ethanol",
-    path: "assets/svg/Ethanol.svg"
+    id: "Ethanol_Gelb",
+    label: "Ethanol Gelb",
+    path: "assets/svg/Ethanol_Gelb.svg"
   },
   {
     id: "Holzspieß",
     label: "Holzspieß",
     path: "assets/svg/Holzspieß.svg"
+  },
+  {
+    id: "Kunststoff-Granulat",
+    label: "Kunststoff-Granulat",
+    path: "assets/svg/Kunststoff-Granulat.svg"
+  },
+  {
+    id: "Objektträger_Deckgläschen",
+    label: "Objektträger mit Deckgläschen",
+    path: "assets/svg/Objektträger_Deckgläschen.svg"
   },
   {
     id: "Objektträger",
@@ -44,11 +54,11 @@ export const svgLibrary = [
     label: "Petrischale (Wasser)",
     path: "assets/svg/Petrischale_Wasser.svg"
   },
-  {
-    id: "Petrischale_Amöben",
-    label: "Petrischale (Amöben)",
-    path: "assets/svg/Petrischale_Amöben.svg"
-  },
+  // {
+  //   id: "Petrischale_Amöben",
+  //   label: "Petrischale (Amöben)",
+  //   path: "assets/svg/Petrischale_Amöbe.svg"
+  // },
   {
     id: "Pinsel",
     label: "Pinsel",
@@ -64,11 +74,7 @@ export const svgLibrary = [
     label: "Pipette",
     path: "assets/svg/Pipette.svg"
   },
-  {
-    id: "Kunststoff-Granulat",
-    label: "Kunststoff-Granulat",
-    path: "assets/svg/Kunststoff-Granulat.svg"
-  },
+
   {
     id: "Präparat_Glanzwurm",
     label: "Präparat (Glanzwurm)",
@@ -85,9 +91,19 @@ export const svgLibrary = [
     path: "assets/svg/Reagenzglasständer.svg"
   },
   {
-    id: "Röhrchen_Fluoreszenz",
-    label: "Röhrchen (Suspension)",
-    path: "assets/svg/Röhrchen_Fluoreszenz.svg"
+    id: "Schnappdeckelglas_Leer",
+    label: "Schnappdeckelglas (Leer)",
+    path: "assets/svg/Schnappdeckelglas_Leer.svg"
+  },
+  {
+    id: "Schnappdeckelglas_Wasser",
+    label: "Schnappdeckelglas (Wasser)",
+    path: "assets/svg/Schnappdeckelglas_Wasser.svg"
+  },
+  {
+    id: "Schnappdeckelglas_Suspension",
+    label: "Schnappdeckelglas (Suspension)",
+    path: "assets/svg/Schnappdeckelglas_Suspension.svg"
   },
   {
     id: "Schutzbrille",
