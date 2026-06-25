@@ -86,6 +86,11 @@ export const svgLibrary = [
     path: "assets/svg/Reagenzglas_Leer.svg"
   },
   {
+    id: "Reagenzglas_Paramecium",
+    label: "Reagenzglas (Paramecium)",
+    path: "assets/svg/Reagenzglas_Paramecium.svg"
+  },
+  {
     id: "Reagenzglasständer",
     label: "Reagenzglasständer",
     path: "assets/svg/Reagenzglasständer.svg"
