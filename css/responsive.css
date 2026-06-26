@@ -1,23 +1,114 @@
+/* =========================================================
+   Responsive Layout – LabSketch Didacticae
+   ========================================================= */
+
+
+/* ---------- Grundzustand: Desktop ---------- */
+
 .mobile-dock,
-.mobile-overlay {
+.mobile-overlay,
+.mobile-canvas-toolbar,
+.mobile-export-panel,
+.mobile-tools-panel,
+.sheet-header {
   display: none;
 }
 
+
+/* ---------- Tablet / kleinere Desktops ---------- */
+
+@media (max-width: 1200px) {
+  .main-layout {
+    grid-template-columns: 240px minmax(0, 1fr) 240px;
+  }
+
+  .topbar-actions {
+    gap: 6px;
+  }
+
+  .btn {
+    padding: 8px 10px;
+  }
+}
+
+
+/* ---------- Tablet: Eigenschaften ausblendbar ---------- */
+
+@media (max-width: 980px) {
+  .main-layout {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .properties-panel {
+    display: none;
+  }
+
+  .properties-panel.is-hidden {
+    display: none;
+  }
+}
+
+
+/* ---------- Manuell ausgeblendete Panels Desktop/Tablet ---------- */
+
+.asset-panel.is-hidden,
+.properties-panel.is-hidden {
+  display: none;
+}
+
+@media (min-width: 761px) {
+  .main-layout:has(.asset-panel.is-hidden) {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+
+  .main-layout:has(.properties-panel.is-hidden) {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+
+  .main-layout:has(.asset-panel.is-hidden):has(.properties-panel.is-hidden) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* =========================================================
+   Smartphone Layout
+   ========================================================= */
+
 @media (max-width: 760px) {
+  html,
   body {
+    width: 100%;
+    height: 100%;
     overflow: hidden;
   }
 
-  .app-shell {
-    height: 100vh;
-    grid-template-rows: auto 1fr auto;
+  body {
+    background: var(--color-bg);
   }
+
+  .app-shell {
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+
+  /* ---------- Topbar ---------- */
 
   .topbar {
     min-height: 56px;
-    padding: var(--space-sm);
+    padding:
+      calc(8px + env(safe-area-inset-top))
+      var(--space-sm)
+      8px;
     flex-direction: row;
     align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .brand-title {
+    font-size: 20px;
   }
 
   .brand-subtitle {
@@ -28,77 +119,90 @@
     display: none;
   }
 
+
+  /* ---------- Main / Canvas Fokus ---------- */
+
   .main-layout {
     display: block;
-    padding: 0;
     min-height: 0;
+    padding: 0;
   }
 
   .canvas-area {
-    height: calc(100vh - 56px - 64px);
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
+    height: calc(
+      100dvh
+      - 56px
+      - 64px
+      - env(safe-area-inset-top)
+      - env(safe-area-inset-bottom)
+    );
     padding: var(--space-sm);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--color-bg);
   }
 
   .canvas-toolbar {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 4px;
+    display: none;
+  }
+
+  .mobile-canvas-toolbar {
+    display: grid;
+    grid-template-columns: repeat(4, 44px) 1fr;
+    gap: 8px;
+    margin-bottom: var(--space-sm);
+  }
+
+  .mobile-canvas-toolbar .icon-btn,
+  .mobile-canvas-toolbar .btn {
+    min-height: 44px;
   }
 
   .canvas-wrapper {
+    min-height: 0;
     padding: var(--space-sm);
+    overflow: auto;
   }
 
-  .asset-panel,
-  .properties-panel {
-    position: fixed;
-    left: var(--space-sm);
-    right: var(--space-sm);
-    bottom: 76px;
-    z-index: 20;
-    max-height: 68vh;
-    display: none;
-    border-radius: 22px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+  #canvas {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 10 / 7;
   }
 
-  .asset-panel.is-mobile-open,
-  .properties-panel.is-mobile-open {
-    display: flex;
+  .statusbar {
+    gap: var(--space-sm);
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 12px;
   }
 
-  .layers-panel {
-    display: none;
-  }
 
-  .properties-panel.show-layers .property-grid {
-    display: none;
-  }
-
-  .properties-panel.show-layers .layers-panel {
-    display: block;
-    overflow-y: auto;
-  }
+  /* ---------- Mobile Dock ---------- */
 
   .mobile-dock {
-    height: 64px;
+    height: calc(64px + env(safe-area-inset-bottom));
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
-    padding: 8px;
+    padding:
+      8px
+      8px
+      calc(8px + env(safe-area-inset-bottom));
     background: var(--color-primary);
     border-top: 1px solid rgba(255,255,255,0.12);
   }
 
   .mobile-dock button {
+    min-height: 44px;
     border: none;
     border-radius: 14px;
     background: var(--color-primary-soft);
     color: var(--color-surface-soft);
     font-size: 12px;
+    cursor: pointer;
   }
 
   .mobile-dock button.is-active {
@@ -107,38 +211,60 @@
     font-weight: 700;
   }
 
+
+  /* ---------- Overlay ---------- */
+
   .mobile-overlay {
     position: fixed;
     inset: 0;
     z-index: 15;
-    background: rgba(0,0,0,0.22);
+    display: none;
+    background: rgba(0, 0, 0, 0.24);
   }
 
   .mobile-overlay.is-visible {
     display: block;
   }
 
-  .statusbar {
-    font-size: 12px;
-    overflow-x: auto;
-    white-space: nowrap;
+
+  /* ---------- Bottom Sheets ---------- */
+
+  .asset-panel,
+  .properties-panel,
+  .mobile-export-panel,
+  .mobile-tools-panel {
+    position: fixed;
+    left: var(--space-sm);
+    right: var(--space-sm);
+    bottom: calc(64px + env(safe-area-inset-bottom) + 12px);
+    z-index: 20;
+
+    max-height: calc(100dvh - 140px);
+    display: none;
+
+    border-radius: 22px;
+    background: var(--color-surface);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+    overflow: hidden;
   }
-}
 
-.sheet-header {
-  display: none;
-}
+  .asset-panel.is-mobile-open,
+  .properties-panel.is-mobile-open,
+  .mobile-export-panel.is-mobile-open,
+  .mobile-tools-panel.is-mobile-open {
+    display: flex;
+    flex-direction: column;
+  }
 
-.mobile-export-panel {
-  display: none;
-}
 
-@media (max-width: 760px) {
+  /* ---------- Sheet Header ---------- */
+
   .sheet-header {
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    flex-shrink: 0;
     padding: 10px 12px 4px;
   }
 
@@ -160,93 +286,87 @@
     background: var(--color-surface-soft);
     color: var(--color-primary);
     font-size: 22px;
+    line-height: 1;
     cursor: pointer;
   }
 
-  .asset-panel,
-  .properties-panel,
-  .mobile-export-panel {
-    position: fixed;
-    left: var(--space-sm);
-    right: var(--space-sm);
-    bottom: 76px;
-    z-index: 20;
-    max-height: 68vh;
+
+  /* ---------- Mobile Panel Inhalte ---------- */
+
+  .tool-list {
+    overflow-y: auto;
+    padding-bottom: var(--space-lg);
+  }
+
+  .properties-panel .property-grid {
+    overflow-y: auto;
+  }
+
+  .layers-panel {
     display: none;
-    border-radius: 22px;
-    background: var(--color-surface);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.28);
-    overflow: hidden;
+    overflow-y: auto;
   }
 
-  .asset-panel.is-mobile-open,
-  .properties-panel.is-mobile-open,
-  .mobile-export-panel.is-mobile-open {
-    display: flex;
-    flex-direction: column;
+  .properties-panel.show-layers .property-grid {
+    display: none;
   }
 
-  .mobile-export-actions {
+  .properties-panel.show-layers .layers-panel {
+    display: block;
+  }
+
+  .mobile-export-actions,
+  .mobile-tools-grid {
     display: grid;
     gap: var(--space-sm);
     padding: var(--space-md);
-  }
-
-  .mobile-export-actions .btn {
-    width: 100%;
-    min-height: 44px;
-  }
-}
-
-.mobile-canvas-toolbar,
-.mobile-tools-panel {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  .asset-panel,
-  .properties-panel,
-  .mobile-export-panel,
-  .mobile-tools-panel {
-    position: fixed;
-    left: var(--space-sm);
-    right: var(--space-sm);
-
-    bottom: calc(64px + env(safe-area-inset-bottom) + 12px);
-
-    z-index: 20;
-    max-height: calc(100dvh - 140px);
-    display: none;
-
-    border-radius: 22px;
-    background: var(--color-surface);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.28);
-    overflow: hidden;
-  }
-
-  .asset-panel.is-mobile-open,
-  .properties-panel.is-mobile-open,
-  .mobile-export-panel.is-mobile-open,
-  .mobile-tools-panel.is-mobile-open {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .mobile-tools-grid,
-  .mobile-export-actions,
-  .tool-list,
-  .layers-list {
     overflow-y: auto;
   }
 
   .mobile-tools-grid {
+    grid-template-columns: 1fr 1fr;
     max-height: calc(100dvh - 220px);
+  }
+
+  .mobile-export-actions .btn,
+  .mobile-tools-grid .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+
+  /* ---------- Manuell versteckt auf Mobile nicht erzwingen ---------- */
+
+  .asset-panel.is-hidden,
+  .properties-panel.is-hidden {
+    display: none;
+  }
+
+  .asset-panel.is-hidden.is-mobile-open,
+  .properties-panel.is-hidden.is-mobile-open {
+    display: flex;
   }
 }
 
-@media (max-width: 760px) {
-  .mobile-dock {
-    height: calc(64px + env(safe-area-inset-bottom));
-    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+
+/* ---------- sehr kleine Smartphones ---------- */
+
+@media (max-width: 420px) {
+  .mobile-canvas-toolbar {
+    grid-template-columns: repeat(4, 40px) 1fr;
+    gap: 6px;
+  }
+
+  .mobile-canvas-toolbar .icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mobile-tools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .property-grid {
+    grid-template-columns: 1fr;
   }
 }
