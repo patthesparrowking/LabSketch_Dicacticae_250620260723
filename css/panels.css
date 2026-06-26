@@ -34,6 +34,9 @@
 .tool-list {
   padding: var(--space-md);
   overflow-y: auto;
+    overflow: scroll;
+  scrollbar-color: red orange;
+  scrollbar-width: thin;
 }
 
 .station-group {
