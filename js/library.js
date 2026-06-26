@@ -66,10 +66,10 @@ export const svgLibrary = [
     path: "assets/svg/Taschenlampe_Grünlicht.svg"
   },
     {
-    id: "Stereomikroskop",
-    label: "Stereomikroskop",
+    id: "Mikroskop (Invers)",
+    label: "Mikroskop (Invers)",
     station: "Checkpoint Beta",
-    path: "assets/svg/Stereomikroskop.svg"
+    path: "assets/svg/Inverses_Mikroskop.svg"
   },
   {
     id: "Mikrotom",
