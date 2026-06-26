@@ -18,7 +18,7 @@
   place-items: center;
   overflow: auto;
   background:
-    linear-gradient(45deg, rgba(24,51,31,0.04) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(215, 235, 220, 0.04) 25%, transparent 25%),
     linear-gradient(-45deg, rgba(24,51,31,0.04) 25%, transparent 25%);
   background-size: 24px 24px;
   border-radius: var(--radius-md);
@@ -30,7 +30,7 @@
   width: min(100%, 1000px);
   height: auto;
   max-height: 100%;
-  aspect-ratio: 10 / 7;
+  /* aspect-ratio: 10 / 7; */
   background: black;
   border-radius: var(--radius-md);
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);

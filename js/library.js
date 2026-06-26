@@ -191,10 +191,10 @@ export const svgLibrary = [
     path: "assets/svg/Stereomikroskop.svg"
   },
     {
-    id: "Stereomikroskop",
-    label: "Stereomikroskop",
+    id: "Durchlicht_Mikroskop",
+    label: "Durchlicht Mikroskop",
     station: "Checkpoint Beta",
-    path: "assets/svg/Stereomikroskop.svg"
+    path: "assets/svg/Durchlicht_Mikroskop.svg"
   },
   {
     id: "Calciumchlorid-Lösung",
