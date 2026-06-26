@@ -38,6 +38,10 @@
     <main class="main-layout">
 
       <aside class="asset-panel">
+        <div class="sheet-header">
+  <span class="sheet-handle"></span>
+  <button class="sheet-close" data-close-sheet>×</button>
+</div>
         <div class="panel-header">
           <h2>Objekte</h2>
           <p>Laborgeräte, Stationen und Symbole</p>
@@ -67,6 +71,14 @@
 <button id="visibilityBtn" class="btn">Ausblenden</button>
         </div>
 
+        <div class="mobile-canvas-toolbar">
+  <button id="mobileUndoBtn" class="icon-btn">↶</button>
+  <button id="mobileRedoBtn" class="icon-btn">↷</button>
+  <button id="mobileDuplicateBtn" class="icon-btn">⧉</button>
+  <button id="mobileDeleteBtn" class="icon-btn">⌫</button>
+  <button id="mobileMoreToolsBtn" class="btn">Mehr</button>
+</div>
+
         <div class="canvas-wrapper">
           <svg id="canvas" viewBox="0 0 1000 700">
             <rect id="background" width="1000" height="700" fill="#292929" />
@@ -92,6 +104,10 @@
       </section>
 
       <aside class="properties-panel">
+        <div class="sheet-header">
+          <span class="sheet-handle"></span>
+          <button class="sheet-close" data-close-sheet>×</button>
+        </div>
         <div class="panel-header">
           <h2>Eigenschaften</h2>
           <p>Ausgewähltes Objekt bearbeiten</p>
@@ -123,13 +139,65 @@
             <input id="textInput" type="text">
           </label>
         </div>
-        <div class="layers-panel">
+        <div class="layers-panel" id="layersPanel">
   <h3>Ebenen</h3>
   <div id="layersList" class="layers-list"></div>
 </div>
       </aside>
+      <aside class="mobile-export-panel" id="mobileExportPanel">
+  <div class="sheet-header">
+    <span class="sheet-handle"></span>
+    <button class="sheet-close" data-close-sheet>×</button>
+  </div>
+
+  <div class="panel-header">
+    <h2>Export & Projekt</h2>
+    <p>Datei speichern oder exportieren</p>
+  </div>
+
+  <div class="mobile-export-actions">
+    <button id="mobileSaveProjectBtn" class="btn">Projekt speichern</button>
+    <button id="mobileLoadProjectBtn" class="btn">Projekt laden</button>
+    <button id="mobileExportSvgBtn" class="btn">SVG exportieren</button>
+    <button id="mobileExportPngBtn" class="btn primary">PNG exportieren</button>
+  </div>
+</aside>
+
+<aside class="mobile-tools-panel" id="mobileToolsPanel">
+  <div class="sheet-header">
+    <span class="sheet-handle"></span>
+    <button class="sheet-close" data-close-sheet>×</button>
+  </div>
+
+  <div class="panel-header">
+    <h2>Werkzeuge</h2>
+    <p>Objekt bearbeiten und Ansicht steuern</p>
+  </div>
+
+  <div class="mobile-tools-grid">
+    <button id="mobileSmallerBtn" class="btn">− Kleiner</button>
+    <button id="mobileBiggerBtn" class="btn">+ Größer</button>
+    <button id="mobileRotateLeftBtn" class="btn">↺ Links drehen</button>
+    <button id="mobileRotateRightBtn" class="btn">↻ Rechts drehen</button>
+    <button id="mobileFrontBtn" class="btn">Nach vorne</button>
+    <button id="mobileBackBtn" class="btn">Nach hinten</button>
+    <button id="mobileLockBtn" class="btn">Sperren</button>
+    <button id="mobileVisibilityBtn" class="btn">Ausblenden</button>
+    <button id="mobileGridBtn" class="btn">Raster</button>
+    <button id="mobileSnapBtn" class="btn">Snap</button>
+  </div>
+</aside>
 
     </main>
+
+    <nav class="mobile-dock">
+  <button id="mobileAssetsBtn">Objekte</button>
+  <button id="mobilePropertiesBtn">Eigenschaften</button>
+  <button id="mobileLayersBtn">Ebenen</button>
+  <button id="mobileExportBtn">Export</button>
+</nav>
+
+<div id="mobileOverlay" class="mobile-overlay"></div>
   </div>
 
   <script type="module" src="js/app.js"></script>

@@ -20,6 +20,7 @@ import { saveHistoryState, undo, redo } from "./history.js";
 import { toggleLockSelected } from "./lock.js";
 import { toggleVisibilitySelected } from "./visibility.js";
 import { updateLayerPanel } from "./layerPanel.js";
+import { undo, redo, saveHistoryState } from "./history.js";
 
 const smallerBtn = document.getElementById("smallerBtn");
 const biggerBtn = document.getElementById("biggerBtn");
@@ -41,6 +42,22 @@ const redoBtn = document.getElementById("redoBtn");
 const lockBtn = document.getElementById("lockBtn");
 const visibilityBtn = document.getElementById("visibilityBtn");
 
+const mobileUndoBtn = document.getElementById("mobileUndoBtn");
+const mobileRedoBtn = document.getElementById("mobileRedoBtn");
+const mobileDuplicateBtn = document.getElementById("mobileDuplicateBtn");
+const mobileDeleteBtn = document.getElementById("mobileDeleteBtn");
+
+const mobileSmallerBtn = document.getElementById("mobileSmallerBtn");
+const mobileBiggerBtn = document.getElementById("mobileBiggerBtn");
+const mobileRotateLeftBtn = document.getElementById("mobileRotateLeftBtn");
+const mobileRotateRightBtn = document.getElementById("mobileRotateRightBtn");
+const mobileFrontBtn = document.getElementById("mobileFrontBtn");
+const mobileBackBtn = document.getElementById("mobileBackBtn");
+const mobileLockBtn = document.getElementById("mobileLockBtn");
+const mobileVisibilityBtn = document.getElementById("mobileVisibilityBtn");
+const mobileGridBtn = document.getElementById("mobileGridBtn");
+const mobileSnapBtn = document.getElementById("mobileSnapBtn");
+
 renderToolButtons();
 initPropertiesPanel();
 initUiControls();
@@ -49,6 +66,38 @@ updateStatusBar();
 saveHistoryState();
 initShortcuts();
 updateLayerPanel();
+
+mobileUndoBtn?.addEventListener("click", async () => {
+  await undo();
+});
+
+mobileRedoBtn?.addEventListener("click", async () => {
+  await redo();
+});
+
+mobileDuplicateBtn?.addEventListener("click", async () => {
+  await duplicateSelected();
+});
+
+mobileDeleteBtn?.addEventListener("click", () => {
+  const selected = getSelectedObject();
+  if (!selected) return;
+
+  removeObject(selected.id);
+  clearSelection();
+  saveHistoryState();
+});
+
+mobileSmallerBtn?.addEventListener("click", () => scaleSelected(-0.1));
+mobileBiggerBtn?.addEventListener("click", () => scaleSelected(0.1));
+mobileRotateLeftBtn?.addEventListener("click", () => rotateSelected(-15));
+mobileRotateRightBtn?.addEventListener("click", () => rotateSelected(15));
+mobileFrontBtn?.addEventListener("click", () => moveToFront());
+mobileBackBtn?.addEventListener("click", () => moveToBack());
+mobileLockBtn?.addEventListener("click", () => toggleLockSelected());
+mobileVisibilityBtn?.addEventListener("click", () => toggleVisibilitySelected());
+mobileGridBtn?.addEventListener("click", () => toggleGrid());
+mobileSnapBtn?.addEventListener("click", () => toggleSnap());
 
 assetSearchInput.addEventListener("input", () => {
   renderToolButtons(assetSearchInput.value);
