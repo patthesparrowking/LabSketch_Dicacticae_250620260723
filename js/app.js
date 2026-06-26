@@ -16,7 +16,7 @@ import { initShortcuts } from "./shortcuts.js";
 import { LabObject } from "./models/LabObject.js";
 import { addObject, removeObject } from "./store/objectStore.js";
 import { renderObject } from "./renderer/objectRenderer.js";
-import { saveHistoryState, undo, redo } from "./history.js";
+// import { saveHistoryState, undo, redo } from "./history.js";
 import { toggleLockSelected } from "./lock.js";
 import { toggleVisibilitySelected } from "./visibility.js";
 import { updateLayerPanel } from "./layerPanel.js";
