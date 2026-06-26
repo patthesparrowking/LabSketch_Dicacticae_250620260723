@@ -1,5 +1,6 @@
-import { getSelectedElement } from "./selection.js";
-import { updateTransform } from "./transform.js";
+import { getSelectedObject } from "./selection.js";
+import { renderObject } from "./renderer/objectRenderer.js";
+import { saveHistoryState } from "./history.js";
 
 const posXInput = document.getElementById("posXInput");
 const posYInput = document.getElementById("posYInput");
@@ -9,21 +10,21 @@ const textInput = document.getElementById("textInput");
 const textProperty = document.getElementById("textProperty");
 
 export function updatePropertiesPanel() {
-  const selected = getSelectedElement();
+  const selected = getSelectedObject();
 
   if (!selected) {
     clearPropertiesPanel();
     return;
   }
 
-  posXInput.value = Math.round(Number(selected.dataset.x));
-  posYInput.value = Math.round(Number(selected.dataset.y));
-  scaleInput.value = Number(selected.dataset.scale);
-  rotationInput.value = Number(selected.dataset.rotation);
+  posXInput.value = Math.round(selected.x);
+  posYInput.value = Math.round(selected.y);
+  scaleInput.value = selected.scale;
+  rotationInput.value = selected.rotation;
 
-  if (selected.dataset.type === "label") {
+  if (selected.type === "label") {
     textProperty.style.display = "flex";
-    textInput.value = selected.textContent;
+    textInput.value = selected.text || selected.element?.textContent || "";
   } else {
     textProperty.style.display = "none";
     textInput.value = "";
@@ -36,20 +37,29 @@ export function clearPropertiesPanel() {
   scaleInput.value = "";
   rotationInput.value = "";
   textInput.value = "";
-  textProperty.style.display = "none";
+
+  if (textProperty) {
+    textProperty.style.display = "none";
+  }
 }
 
 export function initPropertiesPanel() {
-  posXInput.addEventListener("input", updateSelectedFromPanel);
-  posYInput.addEventListener("input", updateSelectedFromPanel);
-  scaleInput.addEventListener("input", updateSelectedFromPanel);
-  rotationInput.addEventListener("input", updateSelectedFromPanel);
-  textInput.addEventListener("input", updateSelectedTextFromPanel);
+posXInput.addEventListener("input", updateSelectedFromPanel);
+posYInput.addEventListener("input", updateSelectedFromPanel);
+scaleInput.addEventListener("input", updateSelectedFromPanel);
+rotationInput.addEventListener("input", updateSelectedFromPanel);
+textInput.addEventListener("input", updateSelectedTextFromPanel);
+
+posXInput.addEventListener("change", saveHistoryState);
+posYInput.addEventListener("change", saveHistoryState);
+scaleInput.addEventListener("change", saveHistoryState);
+rotationInput.addEventListener("change", saveHistoryState);
+textInput.addEventListener("change", saveHistoryState);
 }
 
 function updateSelectedFromPanel() {
-  const selected = getSelectedElement();
-  if (!selected) return;
+  const selected = getSelectedObject();
+  if (!selected || selected.locked) return;
 
   const x = parseFloat(posXInput.value);
   const y = parseFloat(posYInput.value);
@@ -57,28 +67,29 @@ function updateSelectedFromPanel() {
   const rotation = parseFloat(rotationInput.value);
 
   if (!Number.isNaN(x)) {
-    selected.dataset.x = x;
+    selected.x = x;
   }
 
   if (!Number.isNaN(y)) {
-    selected.dataset.y = y;
+    selected.y = y;
   }
 
   if (!Number.isNaN(scale) && scale > 0) {
-    selected.dataset.scale = scale;
+    selected.scale = scale;
   }
 
   if (!Number.isNaN(rotation)) {
-    selected.dataset.rotation = rotation;
+    selected.rotation = rotation;
   }
 
-  updateTransform(selected);
+  renderObject(selected);
 }
 
 function updateSelectedTextFromPanel() {
-  const selected = getSelectedElement();
+  const selected = getSelectedObject();
 
-  if (!selected || selected.dataset.type !== "label") return;
+  if (!selected || selected.locked || selected.type !== "label") return;
 
-  selected.textContent = textInput.value;
+  selected.text = textInput.value;
+  renderObject(selected);
 }

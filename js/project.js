@@ -1,31 +1,31 @@
-import { canvas, addToCanvas, makeDraggable } from "./canvas.js";
+import { addToCanvas, makeDraggable } from "./canvas.js";
 import { createObject } from "./objects.js";
-import { selectElement, clearSelection } from "./selection.js";
-import { updateTransform } from "./transform.js";
-import { makeTextEditable } from "./text.js";
+import { selectObject, clearSelection } from "./selection.js";
+import { renderObject } from "./renderer/objectRenderer.js";
+import { LabObject } from "./models/LabObject.js";
+import { addObject, getAllObjects, clearObjects } from "./store/objectStore.js";
+import { updateLayerPanel } from "./layerPanel.js";
 
 export function saveProject() {
   clearSelection();
 
-  const objects = Array.from(canvas.children)
-    .filter(element => element.id !== "background")
-    .map(element => {
-      const data = {
-        type: element.dataset.type,
-        x: Number(element.dataset.x),
-        y: Number(element.dataset.y),
-        scale: Number(element.dataset.scale),
-        rotation: Number(element.dataset.rotation)
-      };
+  const projectData = getAllObjects().map(object => ({
+    type: object.type,
+    name: object.name,
+    x: object.x,
+    y: object.y,
+    scale: object.scale,
+    rotation: object.rotation,
+    text: object.text,
+    path: object.path,
+    station: object.station,
+    tags: object.tags,
+    locked: object.locked,
+    visible: object.visible
+  }));
 
-      if (element.dataset.type === "label") {
-        data.text = element.textContent;
-      }
+  const json = JSON.stringify(projectData, null, 2);
 
-      return data;
-    });
-
-  const json = JSON.stringify(objects, null, 2);
   const blob = new Blob([json], {
     type: "application/json"
   });
@@ -41,51 +41,68 @@ export function saveProject() {
 }
 
 export function loadProjectFromFile(file) {
-  const reader = new FileReader();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-  reader.onload = async event => {
-    const objects = JSON.parse(event.target.result);
-    await loadProject(objects);
-  };
+    reader.onload = async event => {
+      try {
+        const projectData = JSON.parse(event.target.result);
+        await loadProjectData(projectData);
+        resolve();
+      } catch (error) {
+        console.error("Projekt konnte nicht geladen werden:", error);
+        alert("Die Projektdatei konnte nicht geladen werden.");
+        reject(error);
+      }
+    };
 
-  reader.readAsText(file);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(file);
+  });
 }
 
-async function loadProject(objects) {
+export async function loadProjectData(projectData) {
   clearSelection();
+  clearObjects();
 
-  Array.from(canvas.children)
-    .filter(element => element.id !== "background")
-    .forEach(element => element.remove());
+  let lastObject = null;
 
-  for (const item of objects) {
-    const element = await createObject(item.type);
+  for (const data of projectData) {
+    const element = await createObject(data.type);
 
     if (!element) continue;
 
+    const object = new LabObject({
+      type: data.type,
+      name: data.name,
+      x: data.x,
+      y: data.y,
+      scale: data.scale,
+      rotation: data.rotation,
+      text: data.text,
+      path: data.path,
+      station: data.station,
+      tags: data.tags || []
+    });
+
+    object.locked = data.locked || false;
+    object.visible = data.visible !== false;
+    object.element = element;
+
     element.classList.add("draggable");
+    element.dataset.objectId = object.id;
 
-    element.dataset.type = item.type;
-    element.dataset.x = item.x;
-    element.dataset.y = item.y;
-    element.dataset.scale = item.scale;
-    element.dataset.rotation = item.rotation;
+    addObject(object);
+    renderObject(object);
 
-    if (item.type === "label") {
-      element.textContent = item.text || "Beschriftung";
-      makeTextEditable(element);
-    }
-
-    updateTransform(element);
     addToCanvas(element);
     makeDraggable(element);
-  }
 
-  const lastObject = Array.from(canvas.children)
-    .filter(element => element.id !== "background")
-    .at(-1);
+    lastObject = object;
+  }
 
   if (lastObject) {
-    selectElement(lastObject);
+    selectObject(lastObject);
   }
+  updateLayerPanel();
 }

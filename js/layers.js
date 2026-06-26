@@ -1,47 +1,73 @@
-import { canvas, makeDraggable } from "./canvas.js";
-import { selectElement, getSelectedElement } from "./selection.js";
-import { updateTransform } from "./transform.js";
-import { makeTextEditable } from "./text.js";
+import { canvas, addToCanvas, makeDraggable } from "./canvas.js";
+import { getSelectedObject, selectObject } from "./selection.js";
+import { addObject } from "./store/objectStore.js";
+import { renderObject } from "./renderer/objectRenderer.js";
+import { LabObject } from "./models/LabObject.js";
+import { createObject } from "./objects.js";
+import { saveHistoryState } from "./history.js";
+import { updateLayerPanel } from "./layerPanel.js";
 
-export function duplicateSelected() {
-  const selected = getSelectedElement();
+export async function duplicateSelected() {
+  const selected = getSelectedObject();
 
   if (!selected) return;
 
-  const clone = selected.cloneNode(true);
+  const element = await createObject(selected.type);
 
-  if (clone.tagName === "text") {
-  makeTextEditable(clone);
-}
+  if (!element) return;
 
-  clone.dataset.x = Number(selected.dataset.x) + 30;
-  clone.dataset.y = Number(selected.dataset.y) + 30;
-  clone.dataset.scale = selected.dataset.scale;
-  clone.dataset.rotation = selected.dataset.rotation;
+  const clone = new LabObject({
+    type: selected.type,
+    name: selected.name,
+    x: selected.x + 30,
+    y: selected.y + 30,
+    scale: selected.scale,
+    rotation: selected.rotation,
+    text: selected.text,
+    path: selected.path,
+    station: selected.station,
+    tags: selected.tags
+  });
 
-  clone.classList.remove("selected");
+  clone.element = element;
 
-  updateTransform(clone);
-  canvas.appendChild(clone);
+  element.classList.add("draggable");
+  element.dataset.objectId = clone.id;
 
-  makeDraggable(clone);
-  selectElement(clone);
+  addObject(clone);
+  renderObject(clone);
+
+  addToCanvas(element);
+  makeDraggable(element);
+  selectObject(clone);
+  saveHistoryState();
+  updateLayerPanel();
 }
 
 export function moveToFront() {
-  const selected = getSelectedElement();
+  const selected = getSelectedObject();
 
-  if (!selected) return;
+  if (!selected?.element) return;
 
-  canvas.appendChild(selected);
+  canvas.appendChild(selected.element);
+  saveHistoryState();
+  updateLayerPanel();
 }
 
 export function moveToBack() {
-  const selected = getSelectedElement();
+  const selected = getSelectedObject();
 
-  if (!selected) return;
+  if (!selected?.element) return;
 
   const background = document.getElementById("background");
+  const grid = document.getElementById("grid");
 
-  canvas.insertBefore(selected, background.nextSibling);
+  if (grid) {
+    canvas.insertBefore(selected.element, grid.nextSibling);
+  } else if (background) {
+    canvas.insertBefore(selected.element, background.nextSibling);
+  }
+
+  saveHistoryState();
+  updateLayerPanel();
 }

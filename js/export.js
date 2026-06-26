@@ -10,20 +10,25 @@ export function exportSvg() {
   clonedCanvas.setAttribute("width", "1000");
   clonedCanvas.setAttribute("height", "700");
 
+  const grid = clonedCanvas.querySelector("#grid");
+  if (grid) grid.remove();
+
+  clonedCanvas.querySelectorAll(".selected").forEach(el => {
+    el.classList.remove("selected");
+  });
+
   const svgText = new XMLSerializer().serializeToString(clonedCanvas);
-  const svgBlob = new Blob([svgText], {
+
+  const blob = new Blob([svgText], {
     type: "image/svg+xml;charset=utf-8"
   });
 
-  const url = URL.createObjectURL(svgBlob);
+  const url = URL.createObjectURL(blob);
 
-  const downloadLink = document.createElement("a");
-  downloadLink.href = url;
-  downloadLink.download = "labsketch-export.svg";
-
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "labsketch-export.svg";
+  link.click();
 
   URL.revokeObjectURL(url);
 }

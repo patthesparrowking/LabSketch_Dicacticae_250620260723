@@ -1,28 +1,56 @@
+import { getObjectByElement, getObject } from "./store/objectStore.js";
 import { updatePropertiesPanel, clearPropertiesPanel } from "./properties.js";
 import { updateStatusBar } from "./status.js";
+import { updateLayerPanel } from "./layerPanel.js";
 
-let selectedElement = null;
+let selectedObjectId = null;
 
-export function selectElement(element) {
+export function selectObject(objectOrId) {
   clearSelection();
 
-  selectedElement = element;
-  selectedElement.classList.add("selected");
+  const object =
+    typeof objectOrId === "string"
+      ? getObject(objectOrId)
+      : objectOrId;
+
+  if (!object) return;
+
+  selectedObjectId = object.id;
+
+  if (object.element) {
+    object.element.classList.add("selected");
+  }
 
   updatePropertiesPanel();
   updateStatusBar();
+  updateLayerPanel();
+}
+
+export function selectElement(element) {
+  const object = getObjectByElement(element);
+  selectObject(object);
 }
 
 export function clearSelection() {
-  if (selectedElement) {
-    selectedElement.classList.remove("selected");
+  const selected = getSelectedObject();
+
+  if (selected?.element) {
+    selected.element.classList.remove("selected");
   }
 
-  selectedElement = null;
+  selectedObjectId = null;
+
   clearPropertiesPanel();
   updateStatusBar();
+  updateLayerPanel();
+}
+
+export function getSelectedObject() {
+  if (!selectedObjectId) return null;
+  return getObject(selectedObjectId);
 }
 
 export function getSelectedElement() {
-  return selectedElement;
+  const selected = getSelectedObject();
+  return selected?.element || null;
 }

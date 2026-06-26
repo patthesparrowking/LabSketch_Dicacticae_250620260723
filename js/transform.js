@@ -1,34 +1,43 @@
-import { getSelectedElement } from "./selection.js";
+import { getSelectedObject } from "./selection.js";
+import { renderObject } from "./renderer/objectRenderer.js";
+import { updatePropertiesPanel } from "./properties.js";
+import { saveHistoryState } from "./history.js";
 
-export function updateTransform(element) {
-  const x = Number(element.dataset.x) || 0;
-  const y = Number(element.dataset.y) || 0;
-  const scale = Number(element.dataset.scale) || 1;
-  const rotation = Number(element.dataset.rotation) || 0;
-
-  element.setAttribute(
-    "transform",
-    `translate(${x} ${y}) rotate(${rotation}) scale(${scale})`
-  );
+export function renderTransform(object) {
+  renderObject(object);
 }
 
 export function scaleSelected(amount) {
-  const selected = getSelectedElement();
+  const selected = getSelectedObject();
 
-  if (!selected) return;
+  if (!selected || selected.locked) return;
 
-  const currentScale = Number(selected.dataset.scale);
-  const newScale = Math.max(0.2, currentScale + amount);
+  selected.scale = Math.max(0.1, selected.scale + amount);
 
-  selected.dataset.scale = newScale;
-  updateTransform(selected);
+renderObject(selected);
+updatePropertiesPanel();
+saveHistoryState();
 }
 
 export function rotateSelected(amount) {
-  const selected = getSelectedElement();
+  const selected = getSelectedObject();
 
-  if (!selected) return;
+  if (!selected || selected.locked) return;
 
-  selected.dataset.rotation = Number(selected.dataset.rotation) + amount;
-  updateTransform(selected);
+  selected.rotation += amount;
+
+renderObject(selected);
+updatePropertiesPanel();
+saveHistoryState();
+}
+
+export function updateTransform(objectOrElement) {
+  if (!objectOrElement) return;
+
+  if (objectOrElement.element) {
+    renderObject(objectOrElement);
+    return;
+  }
+
+  console.warn("updateTransform wurde noch mit einem SVG-Element aufgerufen. Diese Datei muss später auf ObjectStore umgestellt werden.");
 }

@@ -119,3 +119,56 @@
   color: var(--color-muted);
   font-size: 14px;
 }
+
+.layers-panel {
+  border-top: 1px solid rgba(175, 150, 92, 0.35);
+  padding: var(--space-md);
+}
+
+.layers-panel h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 15px;
+  color: var(--color-text);
+}
+
+.layers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.layer-row {
+  display: grid;
+  grid-template-columns: 1fr 36px 36px;
+  gap: 6px;
+  align-items: center;
+}
+
+.layer-row.is-selected {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.layer-name,
+.layer-action {
+  min-height: 34px;
+  border: 1px solid rgba(175, 150, 92, 0.55);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-soft);
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.layer-name {
+  padding: 0 10px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layer-action:hover,
+.layer-name:hover {
+  background: var(--color-accent);
+}

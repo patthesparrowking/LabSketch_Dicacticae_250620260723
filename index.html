@@ -61,11 +61,15 @@
           <button id="backBtn" class="btn">Nach hinten</button>
           <button id="toggleGridBtn" class="btn">Raster</button>
           <button id="toggleSnapBtn" class="btn">Snap</button>
+          <button id="undoBtn" class="btn">↶ Rückgängig</button>
+<button id="redoBtn" class="btn">↷ Wiederholen</button>
+<button id="lockBtn" class="btn">Sperren</button>
+<button id="visibilityBtn" class="btn">Ausblenden</button>
         </div>
 
         <div class="canvas-wrapper">
-          <svg id="canvas" viewBox="0 0 1400 900">
-            <rect id="background" width="1400" height="900" fill="#020202" />
+          <svg id="canvas" viewBox="0 0 1000 700">
+            <rect id="background" width="1000" height="700" fill="#292929" />
 
             <defs>
               <pattern id="gridPattern" width="15" height="15" patternUnits="userSpaceOnUse">
@@ -76,7 +80,7 @@
               </pattern>
             </defs>
 
-            <rect id="grid" width="1400" height="900" fill="url(#gridPattern)" opacity="0.1" />
+            <rect id="grid" width="1000" height="700" fill="url(#gridPattern)" opacity="0.1" />
           </svg>
         </div>
 
@@ -119,6 +123,10 @@
             <input id="textInput" type="text">
           </label>
         </div>
+        <div class="layers-panel">
+  <h3>Ebenen</h3>
+  <div id="layersList" class="layers-list"></div>
+</div>
       </aside>
 
     </main>

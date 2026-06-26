@@ -1,10 +1,13 @@
 import { selectElement } from "./selection.js";
-import { updateTransform } from "./transform.js";
+import { getObjectByElement } from "./store/objectStore.js";
+import { renderObject } from "./renderer/objectRenderer.js";
 import { snapValue } from "./grid.js";
+import { updatePropertiesPanel } from "./properties.js";
+import { saveHistoryState } from "./history.js";
 
 export const canvas = document.getElementById("canvas");
 
-let draggedElement = null;
+let draggedObject = null;
 let offsetX = 0;
 let offsetY = 0;
 
@@ -19,42 +22,49 @@ export function makeDraggable(element) {
 function startDrag(event) {
   event.stopPropagation();
 
-  draggedElement = event.currentTarget;
-  selectElement(draggedElement);
+  const element = event.currentTarget;
+  const object = getObjectByElement(element);
+
+  if (!object || object.locked) return;
+
+  draggedObject = object;
+  selectElement(element);
 
   const point = getMousePosition(event);
 
-  offsetX = point.x - Number(draggedElement.dataset.x);
-  offsetY = point.y - Number(draggedElement.dataset.y);
+  offsetX = point.x - draggedObject.x;
+  offsetY = point.y - draggedObject.y;
 
-  draggedElement.setPointerCapture(event.pointerId);
+  element.setPointerCapture(event.pointerId);
 
-  draggedElement.addEventListener("pointermove", drag);
-  draggedElement.addEventListener("pointerup", endDrag);
+  element.addEventListener("pointermove", drag);
+  element.addEventListener("pointerup", endDrag);
 }
 
 function drag(event) {
-  if (!draggedElement) return;
+  if (!draggedObject) return;
 
   const point = getMousePosition(event);
 
-draggedElement.dataset.x = snapValue(point.x - offsetX);
-draggedElement.dataset.y = snapValue(point.y - offsetY);
+  draggedObject.x = snapValue(point.x - offsetX);
+  draggedObject.y = snapValue(point.y - offsetY);
 
-  updateTransform(draggedElement);
-  import("./properties.js").then(module => {
-  module.updatePropertiesPanel();
-});
+  renderObject(draggedObject);
+  updatePropertiesPanel();
 }
 
 function endDrag(event) {
-  if (!draggedElement) return;
+  if (!draggedObject?.element) return;
 
-  draggedElement.releasePointerCapture(event.pointerId);
-  draggedElement.removeEventListener("pointermove", drag);
-  draggedElement.removeEventListener("pointerup", endDrag);
+  const element = draggedObject.element;
 
-  draggedElement = null;
+  element.releasePointerCapture(event.pointerId);
+  element.removeEventListener("pointermove", drag);
+  element.removeEventListener("pointerup", endDrag);
+
+  saveHistoryState();
+
+  draggedObject = null;
 }
 
 function getMousePosition(event) {

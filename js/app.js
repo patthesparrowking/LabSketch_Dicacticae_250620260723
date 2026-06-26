@@ -1,17 +1,25 @@
 import { svgLibrary } from "./library.js";
 import { createObject } from "./objects.js";
 import { canvas, addToCanvas, makeDraggable } from "./canvas.js";
-import { selectElement, getSelectedElement, clearSelection } from "./selection.js";
-import { updateTransform, scaleSelected, rotateSelected } from "./transform.js";
+import { selectObject, getSelectedObject, clearSelection } from "./selection.js";
+import { scaleSelected, rotateSelected } from "./transform.js";
 import { duplicateSelected, moveToFront, moveToBack } from "./layers.js";
 import { exportSvg } from "./export.js";
+import { exportPng } from "./pngExport.js";
 import { saveProject, loadProjectFromFile } from "./project.js";
 import { initPropertiesPanel } from "./properties.js";
-import { toggleGrid, toggleSnap } from "./grid.js";
-import { exportPng } from "./pngExport.js";
+import { toggleGrid, toggleSnap, initGridUi } from "./grid.js";
 import { initUiControls } from "./ui.js";
-import { initGridUi } from "./grid.js";
 import { updateStatusBar } from "./status.js";
+import { initShortcuts } from "./shortcuts.js";
+
+import { LabObject } from "./models/LabObject.js";
+import { addObject, removeObject } from "./store/objectStore.js";
+import { renderObject } from "./renderer/objectRenderer.js";
+import { saveHistoryState, undo, redo } from "./history.js";
+import { toggleLockSelected } from "./lock.js";
+import { toggleVisibilitySelected } from "./visibility.js";
+import { updateLayerPanel } from "./layerPanel.js";
 
 const smallerBtn = document.getElementById("smallerBtn");
 const biggerBtn = document.getElementById("biggerBtn");
@@ -21,81 +29,79 @@ const duplicateBtn = document.getElementById("duplicateBtn");
 const frontBtn = document.getElementById("frontBtn");
 const backBtn = document.getElementById("backBtn");
 const exportSvgBtn = document.getElementById("exportSvgBtn");
+const exportPngBtn = document.getElementById("exportPngBtn");
 const saveProjectBtn = document.getElementById("saveProjectBtn");
 const loadProjectBtn = document.getElementById("loadProjectBtn");
 const loadProjectInput = document.getElementById("loadProjectInput");
 const toggleGridBtn = document.getElementById("toggleGridBtn");
 const toggleSnapBtn = document.getElementById("toggleSnapBtn");
-const exportPngBtn = document.getElementById("exportPngBtn");
 const assetSearchInput = document.getElementById("assetSearchInput");
+const undoBtn = document.getElementById("undoBtn");
+const redoBtn = document.getElementById("redoBtn");
+const lockBtn = document.getElementById("lockBtn");
+const visibilityBtn = document.getElementById("visibilityBtn");
 
 renderToolButtons();
+initPropertiesPanel();
+initUiControls();
+initGridUi();
+updateStatusBar();
+saveHistoryState();
+initShortcuts();
+updateLayerPanel();
 
 assetSearchInput.addEventListener("input", () => {
   renderToolButtons(assetSearchInput.value);
 });
 
-initPropertiesPanel();
-
-initUiControls();
-
-initGridUi();
-updateStatusBar();
-
 smallerBtn.addEventListener("click", () => {
   scaleSelected(-0.1);
+
 });
 
 biggerBtn.addEventListener("click", () => {
   scaleSelected(0.1);
+
 });
 
 rotateLeftBtn.addEventListener("click", () => {
   rotateSelected(-15);
+
+});
+
+visibilityBtn.addEventListener("click", () => {
+  toggleVisibilitySelected();
 });
 
 rotateRightBtn.addEventListener("click", () => {
   rotateSelected(15);
+
 });
 
-duplicateBtn.addEventListener("click", () => {
-  duplicateSelected();
+duplicateBtn.addEventListener("click", async () => {
+  await duplicateSelected();
+  updateLayerPanel();
+
 });
 
-frontBtn.addEventListener("click", () => {
-  moveToFront();
+undoBtn.addEventListener("click", async () => {
+  await undo();
 });
 
-backBtn.addEventListener("click", () => {
-  moveToBack();
+lockBtn.addEventListener("click", () => {
+  toggleLockSelected();
 });
 
-exportSvgBtn.addEventListener("click", () => {
-  exportSvg();
+redoBtn.addEventListener("click", async () => {
+  await redo();
 });
+frontBtn.addEventListener("click", () => moveToFront());
+backBtn.addEventListener("click", () => moveToBack());
 
-saveProjectBtn.addEventListener("click", () => {
-  saveProject();
-});
+exportSvgBtn.addEventListener("click", () => exportSvg());
+exportPngBtn.addEventListener("click", () => exportPng());
 
-loadProjectBtn.addEventListener("click", () => {
-  loadProjectInput.click();
-});
-
-toggleGridBtn.addEventListener("click", () => {
-  toggleGrid();
-});
-
-toggleSnapBtn.addEventListener("click", () => {
-  toggleSnap();
-});
-
-exportPngBtn.addEventListener(
-  "click",
-  () => {
-    exportPng();
-  }
-);
+saveProjectBtn.addEventListener("click", () => saveProject());
 
 loadProjectInput.addEventListener("change", event => {
   const file = event.target.files[0];
@@ -103,22 +109,20 @@ loadProjectInput.addEventListener("change", event => {
 
   loadProjectFromFile(file);
   event.target.value = "";
+      saveHistoryState();
+
 });
+
+toggleGridBtn.addEventListener("click", () => toggleGrid());
+toggleSnapBtn.addEventListener("click", () => toggleSnap());
 
 canvas.addEventListener("pointerdown", event => {
-  if (event.target === canvas || event.target.id === "background") {
+  if (event.target === canvas || event.target.id === "background" || event.target.id === "grid") {
     clearSelection();
   }
 });
 
-document.addEventListener("keydown", event => {
-  const selected = getSelectedElement();
 
-  if ((event.key === "Delete" || event.key === "Backspace") && selected) {
-    selected.remove();
-    clearSelection();
-  }
-});
 
 function renderToolButtons(searchTerm = "") {
   const toolList = document.getElementById("toolList");
@@ -139,6 +143,14 @@ function renderToolButtons(searchTerm = "") {
     return searchableText.includes(normalizedSearch);
   });
 
+  if (filteredItems.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "empty-message";
+    emptyMessage.textContent = "Keine passenden Objekte gefunden.";
+    toolList.appendChild(emptyMessage);
+    return;
+  }
+
   const stations = {};
 
   filteredItems.forEach(item => {
@@ -150,14 +162,6 @@ function renderToolButtons(searchTerm = "") {
 
     stations[stationName].push(item);
   });
-
-  if (filteredItems.length === 0) {
-    const emptyMessage = document.createElement("p");
-    emptyMessage.className = "empty-message";
-    emptyMessage.textContent = "Keine passenden Objekte gefunden.";
-    toolList.appendChild(emptyMessage);
-    return;
-  }
 
   Object.entries(stations).forEach(([stationName, items]) => {
     const stationGroup = document.createElement("section");
@@ -209,22 +213,8 @@ function createToolRow(item) {
   button.appendChild(label);
 
   button.addEventListener("click", async () => {
-    const element = await createObject(item.id);
-
-    if (!element) return;
-
-    element.classList.add("draggable");
-
-    element.dataset.type = item.id;
-    element.dataset.x = 350;
-    element.dataset.y = 200;
-    element.dataset.scale = 1;
-    element.dataset.rotation = 0;
-
-    updateTransform(element);
-    addToCanvas(element);
-    makeDraggable(element);
-    selectElement(element);
+    await insertLibraryObject(item);
+saveHistoryState();
   });
 
   const downloadButton = document.createElement("button");
@@ -247,4 +237,35 @@ function createToolRow(item) {
   toolRow.appendChild(downloadButton);
 
   return toolRow;
+}
+
+async function insertLibraryObject(item) {
+  const element = await createObject(item.id);
+
+  if (!element) return;
+
+  const object = new LabObject({
+    type: item.id,
+    name: item.label,
+    x: 350,
+    y: 200,
+    scale: 1,
+    rotation: 0,
+    text: item.id === "label" ? "Beschriftung" : "",
+    path: item.path || "",
+    station: item.station || "",
+    tags: item.tags || []
+  });
+
+  object.element = element;
+
+  element.classList.add("draggable");
+  element.dataset.objectId = object.id;
+
+  addObject(object);
+  renderObject(object);
+
+  addToCanvas(element);
+  makeDraggable(element);
+  selectObject(object);
 }

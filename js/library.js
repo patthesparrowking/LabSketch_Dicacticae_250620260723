@@ -3,7 +3,7 @@ export const svgLibrary = [
     id: "Material",
     label: "Material",
     station: "Checkpoint Alpha",
-    path: "assets/svg/Daphnien_Becherglas.svg"
+    path: "assets/svg/Test.svg"
   },
   {
     id: "Daphnien_Becherglas",
