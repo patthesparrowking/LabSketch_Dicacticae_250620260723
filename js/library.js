@@ -1,9 +1,15 @@
 export const svgLibrary = [
   {
+    id: "Material",
+    label: "Material",
+    station: "Checkpoint Alpha",
+    path: "assets/svg/Daphnien_Becherglas.svg"
+  },
+  {
     id: "Daphnien_Becherglas",
     label: "Daphnien (Becherglas)",
     station: "Checkpoint Beta",
-    path: "assets/svg/Daphnien_Becherglas.svg"
+    path: "assets/svg/Material.svg"
   },
   {
     id: "Taschenlampe_UV",

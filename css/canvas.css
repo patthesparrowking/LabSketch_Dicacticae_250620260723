@@ -31,7 +31,7 @@
   height: auto;
   max-height: 100%;
   aspect-ratio: 10 / 7;
-  background: white;
+  background: black;
   border-radius: var(--radius-md);
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }

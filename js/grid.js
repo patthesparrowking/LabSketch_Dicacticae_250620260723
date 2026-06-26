@@ -3,7 +3,7 @@ import { updateStatusBar } from "./status.js";
 export let snapEnabled = true;
 export let gridVisible = true;
 
-const GRID_SIZE = 25;
+const GRID_SIZE = 15;
 
 export function snapValue(value) {
   if (!snapEnabled) return value;

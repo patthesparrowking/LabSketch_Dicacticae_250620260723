@@ -51,10 +51,26 @@ function updateSelectedFromPanel() {
   const selected = getSelectedElement();
   if (!selected) return;
 
-  selected.dataset.x = Number(posXInput.value);
-  selected.dataset.y = Number(posYInput.value);
-  selected.dataset.scale = Number(scaleInput.value);
-  selected.dataset.rotation = Number(rotationInput.value);
+  const x = parseFloat(posXInput.value);
+  const y = parseFloat(posYInput.value);
+  const scale = parseFloat(scaleInput.value);
+  const rotation = parseFloat(rotationInput.value);
+
+  if (!Number.isNaN(x)) {
+    selected.dataset.x = x;
+  }
+
+  if (!Number.isNaN(y)) {
+    selected.dataset.y = y;
+  }
+
+  if (!Number.isNaN(scale) && scale > 0) {
+    selected.dataset.scale = scale;
+  }
+
+  if (!Number.isNaN(rotation)) {
+    selected.dataset.rotation = rotation;
+  }
 
   updateTransform(selected);
 }

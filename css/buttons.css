@@ -6,12 +6,13 @@ button {
 .icon-btn,
 .tool,
 .tool-download {
-  border: 1px solid rgba(175, 150, 92, 0.7);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-surface-soft);
-  color: var(--color-primary);
+  color: var(--color-muted);
   cursor: pointer;
   transition: 0.15s ease;
+    letter-spacing: -0.2px;
 }
 
 .btn {
@@ -45,15 +46,18 @@ button {
   gap: var(--space-sm);
   padding: 8px 10px;
   text-align: left;
+  font-size: 0.85rem;
+  
 }
 
 .tool-thumbnail {
   width: 32px;
   height: 32px;
   object-fit: contain;
-  background: white;
+  background: var(--color-surface-soft);
+  background: transparent;
   border-radius: 6px;
-  padding: 4px;
+  /* padding: 4px; */
   flex-shrink: 0;
 }
 
@@ -68,3 +72,5 @@ button {
   border-color: var(--color-accent);
   font-weight: 700;
 }
+
+

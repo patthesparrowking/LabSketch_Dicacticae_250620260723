@@ -1,10 +1,10 @@
 import { getSelectedElement } from "./selection.js";
 
 export function updateTransform(element) {
-  const x = Number(element.dataset.x);
-  const y = Number(element.dataset.y);
-  const scale = Number(element.dataset.scale);
-  const rotation = Number(element.dataset.rotation);
+  const x = Number(element.dataset.x) || 0;
+  const y = Number(element.dataset.y) || 0;
+  const scale = Number(element.dataset.scale) || 1;
+  const rotation = Number(element.dataset.rotation) || 0;
 
   element.setAttribute(
     "transform",
