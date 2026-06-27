@@ -1,14 +1,19 @@
 .canvas-area {
+  min-height: 0;
   display: flex;
   flex-direction: column;
   padding: var(--space-md);
 }
 
-.canvas-toolbar {
+.desktop-toolbar {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
   margin-bottom: var(--space-md);
+}
+
+.pocket-canvas-toolbar {
+  display: none;
 }
 
 .canvas-wrapper {
@@ -17,37 +22,23 @@
   display: grid;
   place-items: center;
   overflow: auto;
-  background:
-    linear-gradient(45deg, rgba(215, 235, 220, 0.04) 25%, transparent 25%),
-    linear-gradient(-45deg, rgba(24,51,31,0.04) 25%, transparent 25%);
-  background-size: 24px 24px;
-  border-radius: var(--radius-md);
+  padding: var(--space-md);
   border: 1px solid rgba(175, 150, 92, 0.35);
-  /* padding: var(--space-md); */
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(45deg, rgba(24, 51, 31, 0.04) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(24, 51, 31, 0.04) 25%, transparent 25%);
+  background-size: 24px 24px;
 }
 
 #canvas {
-  position: relative;
   width: min(100%, 1000px);
   height: auto;
   max-height: 100%;
   aspect-ratio: 10 / 7;
-  background: #292929;
+  background: var(--color-white);
   border-radius: var(--radius-md);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-}
-
-.draggable {
-  cursor: grab;
-}
-
-.draggable:active {
-  cursor: grabbing;
-}
-
-.selected {
-  outline: 1px dashed var(--color-muted);
-  outline-offset: 0px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .statusbar {
@@ -59,6 +50,19 @@
   background: var(--color-surface-soft);
   color: var(--color-muted);
   font-size: 13px;
+}
+
+.draggable {
+  cursor: grab;
+}
+
+.draggable:active {
+  cursor: grabbing;
+}
+
+.selected {
+  outline: 2px dashed var(--color-accent);
+  outline-offset: 6px;
 }
 
 .is-locked {

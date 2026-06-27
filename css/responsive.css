@@ -1,40 +1,10 @@
-/* =========================================================
-   Responsive Layout – LabSketch Didacticae
-   ========================================================= */
-
-
-/* ---------- Grundzustand: Desktop ---------- */
-
-.pocket-dock,
-.pocket-overlay,
-.mobile-canvas-toolbar,
-.pocket-export-panel,
-.pocket-sheet,
-.sheet-header {
-  display: none;
-}
-
-
-/* ---------- Tablet / kleinere Desktops ---------- */
-
 @media (max-width: 1200px) {
   .main-layout {
     grid-template-columns: 240px minmax(0, 1fr) 240px;
   }
-
-  .topbar-actions {
-    gap: 6px;
-  }
-
-  .btn {
-    padding: 8px 10px;
-  }
 }
 
-
-/* ---------- Tablet: Eigenschaften ausblendbar ---------- */
-
-@media (max-width: 980px) {
+@media (max-width: 980px) and (min-width: 761px) {
   .main-layout {
     grid-template-columns: 240px minmax(0, 1fr);
   }
@@ -42,49 +12,12 @@
   .properties-panel {
     display: none;
   }
-
-  .properties-panel.is-hidden {
-    display: none;
-  }
 }
-
-
-/* ---------- Manuell ausgeblendete Panels Desktop/Tablet ---------- */
-
-.asset-panel.is-hidden,
-.properties-panel.is-hidden {
-  display: none;
-}
-
-@media (min-width: 761px) {
-  .main-layout:has(.asset-panel.is-hidden) {
-    grid-template-columns: minmax(0, 1fr) 280px;
-  }
-
-  .main-layout:has(.properties-panel.is-hidden) {
-    grid-template-columns: 280px minmax(0, 1fr);
-  }
-
-  .main-layout:has(.asset-panel.is-hidden):has(.properties-panel.is-hidden) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-
-/* =========================================================
-   Smartphone Layout
-   ========================================================= */
 
 @media (max-width: 760px) {
   html,
   body {
-    width: 100%;
-    height: 100%;
     overflow: hidden;
-  }
-
-  body {
-    background: var(--color-bg);
   }
 
   .app-shell {
@@ -92,9 +25,6 @@
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
   }
-
-
-  /* ---------- Topbar ---------- */
 
   .topbar {
     min-height: 56px;
@@ -104,23 +34,16 @@
       8px;
     flex-direction: row;
     align-items: center;
-    gap: var(--space-sm);
   }
 
   .brand-title {
     font-size: 20px;
   }
 
-  .brand-subtitle {
-    display: none;
-  }
-
+  .brand-subtitle,
   .topbar-actions {
     display: none;
   }
-
-
-  /* ---------- Main / Canvas Fokus ---------- */
 
   .main-layout {
     display: block;
@@ -143,33 +66,31 @@
     background: var(--color-bg);
   }
 
-  .canvas-toolbar {
+  .desktop-toolbar {
     display: none;
   }
 
-  .mobile-canvas-toolbar {
+  .pocket-canvas-toolbar {
     display: grid;
-    grid-template-columns: repeat(4, 44px) 1fr;
-    gap: 8px;
+    grid-template-columns: repeat(4, 48px);
+    justify-content: center;
+    gap: 10px;
     margin-bottom: var(--space-sm);
   }
 
-  .mobile-canvas-toolbar .icon-btn,
-  .mobile-canvas-toolbar .btn {
-    min-height: 44px;
+  .pocket-canvas-toolbar .icon-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
   }
 
   .canvas-wrapper {
-    min-height: 0;
     padding: var(--space-sm);
-    overflow: auto;
   }
 
   #canvas {
     width: 100%;
     max-width: 100%;
-    height: auto;
-    aspect-ratio: 10 / 7;
   }
 
   .statusbar {
@@ -178,9 +99,6 @@
     white-space: nowrap;
     font-size: 12px;
   }
-
-
-  /* ---------- Mobile Dock ---------- */
 
   .pocket-dock {
     height: calc(64px + env(safe-area-inset-bottom));
@@ -192,7 +110,7 @@
       8px
       calc(8px + env(safe-area-inset-bottom));
     background: var(--color-primary);
-    border-top: 1px solid rgba(255,255,255,0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .pocket-dock button {
@@ -201,7 +119,8 @@
     border-radius: 14px;
     background: var(--color-primary-soft);
     color: var(--color-surface-soft);
-    font-size: 12px;
+    font-size: 22px;
+    line-height: 1;
     cursor: pointer;
   }
 
@@ -210,9 +129,6 @@
     color: var(--color-primary);
     font-weight: 700;
   }
-
-
-  /* ---------- Overlay ---------- */
 
   .pocket-overlay {
     position: fixed;
@@ -226,12 +142,8 @@
     display: block;
   }
 
-
-  /* ---------- Bottom Sheets ---------- */
-
   .asset-panel,
   .properties-panel,
-  .pocket-export-panel,
   .pocket-sheet {
     position: fixed;
     left: var(--space-sm);
@@ -242,22 +154,18 @@
     max-height: calc(100dvh - 140px);
     display: none;
 
-    border-radius: 22px;
+    border-radius: var(--radius-xl);
     background: var(--color-surface);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+    box-shadow: var(--shadow-sheet);
     overflow: hidden;
   }
 
-  .asset-panel.is-mobile-open,
-  .properties-panel.is-mobile-open,
-  .pocket-export-panel.is-mobile-open,
-  .pocket-sheet.is-mobile-open {
+  .asset-panel.is-pocket-open,
+  .properties-panel.is-pocket-open,
+  .pocket-sheet.is-pocket-open {
     display: flex;
     flex-direction: column;
   }
-
-
-  /* ---------- Sheet Header ---------- */
 
   .sheet-header {
     display: flex;
@@ -268,141 +176,10 @@
     padding: 10px 12px 4px;
   }
 
-  .sheet-handle {
-    width: 42px;
-    height: 5px;
-    border-radius: 999px;
-    background: rgba(24, 51, 31, 0.28);
-  }
-
-  .sheet-close {
-    position: absolute;
-    right: 12px;
-    top: 6px;
-    width: 34px;
-    height: 34px;
-    border: none;
-    border-radius: 999px;
-    background: var(--color-surface-soft);
-    color: var(--color-primary);
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-
-  /* ---------- Mobile Panel Inhalte ---------- */
-
-  .tool-list {
-    overflow-y: auto;
-    padding-bottom: var(--space-lg);
-  }
-
-  .properties-panel .property-grid {
-    overflow-y: auto;
-  }
-
-  .layers-panel {
-    display: none;
-    overflow-y: auto;
-  }
-
-  .properties-panel.show-layers .property-grid {
-    display: none;
-  }
-
-  .properties-panel.show-layers .layers-panel {
-    display: block;
-  }
-
-  .mobile-export-actions,
-  .mobile-tools-grid {
-    display: grid;
-    gap: var(--space-sm);
-    padding: var(--space-md);
-    overflow-y: auto;
-  }
-
-  .mobile-tools-grid {
-    grid-template-columns: 1fr 1fr;
-    max-height: calc(100dvh - 220px);
-  }
-
-  .mobile-export-actions .btn,
-  .mobile-tools-grid .btn {
-    width: 100%;
-    min-height: 44px;
-  }
-
-
-  /* ---------- Manuell versteckt auf Mobile nicht erzwingen ---------- */
-
-  .asset-panel.is-hidden,
-  .properties-panel.is-hidden {
-    display: none;
-  }
-
-  .asset-panel.is-hidden.is-mobile-open,
-  .properties-panel.is-hidden.is-mobile-open {
-    display: flex;
-  }
-}
-
-
-/* ---------- sehr kleine Smartphones ---------- */
-
-@media (max-width: 420px) {
-  .mobile-canvas-toolbar {
-    grid-template-columns: repeat(4, 40px) 1fr;
-    gap: 6px;
-  }
-
-  .mobile-canvas-toolbar .icon-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .mobile-tools-grid {
-    grid-template-columns: 1fr;
-  }
-
+  .tool-list,
+  .layers-list,
   .property-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.mobile-edit-actions {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  .mobile-edit-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-sm);
-    padding: var(--space-md);
-    border-bottom: 1px solid rgba(175, 150, 92, 0.35);
-  }
-
-  .mobile-edit-actions .btn {
-    min-height: 44px;
-  }
-
-  .mobile-edit-actions .danger {
-    background: #f3d6cf;
-    border-color: #c27a6a;
-  }
-
-  .properties-panel.show-layers .mobile-edit-actions,
-  .properties-panel.show-layers .property-grid {
-    display: none;
-  }
-}
-
-@media (max-width: 760px) {
-  .pocket-dock button {
-    font-size: 22px;
-    line-height: 1;
+    overflow-y: auto;
   }
 
   .mobile-edit-actions {
@@ -421,8 +198,38 @@
     font-size: 20px;
   }
 
-  .mobile-edit-actions .danger {
-    background: #f3d6cf;
-    border-color: #c27a6a;
+  .layers-panel {
+    display: none;
+    overflow-y: auto;
+  }
+
+  .properties-panel.show-layers .mobile-edit-actions,
+  .properties-panel.show-layers .property-grid {
+    display: none;
+  }
+
+  .properties-panel.show-layers .layers-panel {
+    display: block;
+  }
+}
+
+@media (max-width: 420px) {
+  .property-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-edit-actions,
+  .pocket-canvas-toolbar {
+    grid-template-columns: repeat(4, 44px);
+  }
+
+  .mobile-edit-actions .icon-btn,
+  .pocket-canvas-toolbar .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .pocket-more-grid {
+    grid-template-columns: repeat(3, 44px);
   }
 }

@@ -1,0 +1,36 @@
+.pocket-dock,
+.pocket-overlay,
+.pocket-sheet,
+.sheet-header {
+  display: none;
+}
+
+.pocket-more-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  justify-content: center;
+  gap: 12px;
+  padding: var(--space-md);
+}
+
+.sheet-handle {
+  width: 42px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(24, 51, 31, 0.28);
+}
+
+.sheet-close {
+  position: absolute;
+  right: 12px;
+  top: 6px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-surface-soft);
+  color: var(--color-primary);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
