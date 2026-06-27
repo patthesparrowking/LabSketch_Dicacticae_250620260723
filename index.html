@@ -113,37 +113,70 @@
           <p>Ausgewähltes Objekt bearbeiten</p>
         </div>
 
-        <div class="property-grid">
-          <label>
-            X
-            <input id="posXInput" type="number">
-          </label>
+<div class="mobile-edit-actions">
+  <button id="mobileSmallerBtn" class="icon-btn" title="Kleiner" aria-label="Kleiner">−</button>
+  <button id="mobileBiggerBtn" class="icon-btn" title="Größer" aria-label="Größer">+</button>
+  <button id="mobileRotateLeftBtn" class="icon-btn" title="Links drehen" aria-label="Links drehen">↺</button>
+  <button id="mobileRotateRightBtn" class="icon-btn" title="Rechts drehen" aria-label="Rechts drehen">↻</button>
+  <button id="mobileDuplicateBtn" class="icon-btn" title="Duplizieren" aria-label="Duplizieren">⧉</button>
+  <button id="mobileDeleteBtn" class="icon-btn danger" title="Löschen" aria-label="Löschen">⌫</button>
+  <button id="mobileLockBtn" class="icon-btn" title="Sperren" aria-label="Sperren">🔒</button>
+  <button id="mobileVisibilityBtn" class="icon-btn" title="Ausblenden" aria-label="Ausblenden">👁</button>
+</div>
 
-          <label>
-            Y
-            <input id="posYInput" type="number">
-          </label>
+<div class="property-grid">
+  <label>
+    X
+    <input id="posXInput" type="number">
+  </label>
 
-          <label>
-            Größe
-            <input id="scaleInput" type="number" step="0.1" min="0.1">
-          </label>
+  <label>
+    Y
+    <input id="posYInput" type="number">
+  </label>
 
-          <label>
-            Rotation
-            <input id="rotationInput" type="number">
-          </label>
+  <label>
+    Größe
+    <input id="scaleInput" type="number" step="0.1" min="0.1">
+  </label>
 
-          <label id="textProperty" class="full">
-            Text
-            <input id="textInput" type="text">
-          </label>
-        </div>
-        <div class="layers-panel" id="layersPanel">
+  <label>
+    Rotation
+    <input id="rotationInput" type="number">
+  </label>
+
+  <label id="textProperty" class="full">
+    Text
+    <input id="textInput" type="text">
+  </label>
+</div>
+
+<div class="layers-panel" id="layersPanel">
   <h3>Ebenen</h3>
   <div id="layersList" class="layers-list"></div>
 </div>
       </aside>
+
+      <aside id="pocketMoreSheet" class="pocket-sheet">
+  <div class="sheet-header">
+    <span class="sheet-handle"></span>
+    <button class="sheet-close" data-close-sheet>×</button>
+  </div>
+
+  <div class="panel-header">
+    <h2>Mehr</h2>
+    <p>Projekt, Export und Ansicht</p>
+  </div>
+
+  <div class="mobile-tools-grid">
+    <button id="mobileSaveProjectBtn" class="btn">Projekt speichern</button>
+    <button id="mobileLoadProjectBtn" class="btn">Projekt laden</button>
+    <button id="mobileExportSvgBtn" class="btn">SVG exportieren</button>
+    <button id="mobileExportPngBtn" class="btn primary">PNG exportieren</button>
+    <button id="mobileGridBtn" class="btn">Raster</button>
+    <button id="mobileSnapBtn" class="btn">Snap</button>
+  </div>
+</aside>
       <aside class="mobile-export-panel" id="mobileExportPanel">
   <div class="sheet-header">
     <span class="sheet-handle"></span>
@@ -190,12 +223,14 @@
 
     </main>
 
-    <nav class="mobile-dock">
-  <button id="mobileAssetsBtn">Objekte</button>
-  <button id="mobilePropertiesBtn">Eigenschaften</button>
-  <button id="mobileLayersBtn">Ebenen</button>
-  <button id="mobileExportBtn">Export</button>
+<nav class="pocket-dock">
+  <button data-pocket-panel="assets" title="Objekte" aria-label="Objekte">◫</button>
+  <button data-pocket-panel="edit" title="Bearbeiten" aria-label="Bearbeiten">✦</button>
+  <button data-pocket-panel="layers" title="Ebenen" aria-label="Ebenen">▤</button>
+  <button data-pocket-panel="more" title="Mehr" aria-label="Mehr">•••</button>
 </nav>
+
+<div id="pocketOverlay" class="pocket-overlay"></div>
 
 <div id="mobileOverlay" class="mobile-overlay"></div>
   </div>

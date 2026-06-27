@@ -21,6 +21,7 @@ import { toggleLockSelected } from "./lock.js";
 import { toggleVisibilitySelected } from "./visibility.js";
 import { updateLayerPanel } from "./layerPanel.js";
 import { undo, redo, saveHistoryState } from "./history.js";
+import { initPocketUi } from "./pocketUi.js";
 
 const smallerBtn = document.getElementById("smallerBtn");
 const biggerBtn = document.getElementById("biggerBtn");
@@ -51,16 +52,40 @@ const mobileSmallerBtn = document.getElementById("mobileSmallerBtn");
 const mobileBiggerBtn = document.getElementById("mobileBiggerBtn");
 const mobileRotateLeftBtn = document.getElementById("mobileRotateLeftBtn");
 const mobileRotateRightBtn = document.getElementById("mobileRotateRightBtn");
-const mobileFrontBtn = document.getElementById("mobileFrontBtn");
-const mobileBackBtn = document.getElementById("mobileBackBtn");
+const mobileDuplicateBtn = document.getElementById("mobileDuplicateBtn");
+const mobileDeleteBtn = document.getElementById("mobileDeleteBtn");
 const mobileLockBtn = document.getElementById("mobileLockBtn");
 const mobileVisibilityBtn = document.getElementById("mobileVisibilityBtn");
-const mobileGridBtn = document.getElementById("mobileGridBtn");
-const mobileSnapBtn = document.getElementById("mobileSnapBtn");
+
+mobileSmallerBtn?.addEventListener("click", () => scaleSelected(-0.1));
+mobileBiggerBtn?.addEventListener("click", () => scaleSelected(0.1));
+mobileRotateLeftBtn?.addEventListener("click", () => rotateSelected(-15));
+mobileRotateRightBtn?.addEventListener("click", () => rotateSelected(15));
+
+mobileDuplicateBtn?.addEventListener("click", async () => {
+  await duplicateSelected();
+});
+
+mobileDeleteBtn?.addEventListener("click", () => {
+  const selected = getSelectedObject();
+  if (!selected) return;
+
+  removeObject(selected.id);
+  clearSelection();
+  saveHistoryState();
+});
+
+mobileLockBtn?.addEventListener("click", () => {
+  toggleLockSelected();
+});
+
+mobileVisibilityBtn?.addEventListener("click", () => {
+  toggleVisibilitySelected();
+});
 
 renderToolButtons();
 initPropertiesPanel();
-initUiControls();
+initPocketUi();
 initGridUi();
 updateStatusBar();
 saveHistoryState();
@@ -171,7 +196,29 @@ canvas.addEventListener("pointerdown", event => {
   }
 });
 
+document.getElementById("mobileSaveProjectBtn")?.addEventListener("click", () => {
+  saveProject();
+});
 
+document.getElementById("mobileLoadProjectBtn")?.addEventListener("click", () => {
+  loadProjectInput.click();
+});
+
+document.getElementById("mobileExportSvgBtn")?.addEventListener("click", () => {
+  exportSvg();
+});
+
+document.getElementById("mobileExportPngBtn")?.addEventListener("click", () => {
+  exportPng();
+});
+
+document.getElementById("mobileGridBtn")?.addEventListener("click", () => {
+  toggleGrid();
+});
+
+document.getElementById("mobileSnapBtn")?.addEventListener("click", () => {
+  toggleSnap();
+});
 
 function renderToolButtons(searchTerm = "") {
   const toolList = document.getElementById("toolList");

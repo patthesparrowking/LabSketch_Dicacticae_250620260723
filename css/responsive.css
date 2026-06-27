@@ -5,11 +5,11 @@
 
 /* ---------- Grundzustand: Desktop ---------- */
 
-.mobile-dock,
-.mobile-overlay,
+.pocket-dock,
+.pocket-overlay,
 .mobile-canvas-toolbar,
-.mobile-export-panel,
-.mobile-tools-panel,
+.pocket-export-panel,
+.pocket-sheet,
 .sheet-header {
   display: none;
 }
@@ -182,7 +182,7 @@
 
   /* ---------- Mobile Dock ---------- */
 
-  .mobile-dock {
+  .pocket-dock {
     height: calc(64px + env(safe-area-inset-bottom));
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -195,7 +195,7 @@
     border-top: 1px solid rgba(255,255,255,0.12);
   }
 
-  .mobile-dock button {
+  .pocket-dock button {
     min-height: 44px;
     border: none;
     border-radius: 14px;
@@ -205,7 +205,7 @@
     cursor: pointer;
   }
 
-  .mobile-dock button.is-active {
+  .pocket-dock button.is-active {
     background: var(--color-accent);
     color: var(--color-primary);
     font-weight: 700;
@@ -214,7 +214,7 @@
 
   /* ---------- Overlay ---------- */
 
-  .mobile-overlay {
+  .pocket-overlay {
     position: fixed;
     inset: 0;
     z-index: 15;
@@ -222,7 +222,7 @@
     background: rgba(0, 0, 0, 0.24);
   }
 
-  .mobile-overlay.is-visible {
+  .pocket-overlay.is-visible {
     display: block;
   }
 
@@ -231,8 +231,8 @@
 
   .asset-panel,
   .properties-panel,
-  .mobile-export-panel,
-  .mobile-tools-panel {
+  .pocket-export-panel,
+  .pocket-sheet {
     position: fixed;
     left: var(--space-sm);
     right: var(--space-sm);
@@ -250,8 +250,8 @@
 
   .asset-panel.is-mobile-open,
   .properties-panel.is-mobile-open,
-  .mobile-export-panel.is-mobile-open,
-  .mobile-tools-panel.is-mobile-open {
+  .pocket-export-panel.is-mobile-open,
+  .pocket-sheet.is-mobile-open {
     display: flex;
     flex-direction: column;
   }
@@ -368,5 +368,61 @@
 
   .property-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+.mobile-edit-actions {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .mobile-edit-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-bottom: 1px solid rgba(175, 150, 92, 0.35);
+  }
+
+  .mobile-edit-actions .btn {
+    min-height: 44px;
+  }
+
+  .mobile-edit-actions .danger {
+    background: #f3d6cf;
+    border-color: #c27a6a;
+  }
+
+  .properties-panel.show-layers .mobile-edit-actions,
+  .properties-panel.show-layers .property-grid {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .pocket-dock button {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .mobile-edit-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 48px);
+    justify-content: center;
+    gap: 10px;
+    padding: var(--space-md);
+    border-bottom: 1px solid rgba(175, 150, 92, 0.35);
+  }
+
+  .mobile-edit-actions .icon-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    font-size: 20px;
+  }
+
+  .mobile-edit-actions .danger {
+    background: #f3d6cf;
+    border-color: #c27a6a;
   }
 }
