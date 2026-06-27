@@ -30,6 +30,7 @@ export function registerObject(element, data = {}) {
   return objectData;
 }
 
+
 export function getObjectByElement(element) {
   if (!element) return null;
   return objects.get(element.dataset.objectId) || null;
