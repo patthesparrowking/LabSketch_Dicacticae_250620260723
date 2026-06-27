@@ -1,4 +1,4 @@
-import { getAllObjects } from "./store/objectStore.js";
+import { getAllObjects } from "./store/ObjectStore.js";
 import { selectObject, getSelectedObject } from "./selection.js";
 import { renderObject } from "./renderer/objectRenderer.js";
 import { updateStatusBar } from "./status.js";

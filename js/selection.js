@@ -1,4 +1,4 @@
-import { getObjectByElement, getObject } from "./store/objectStore.js";
+import { getObjectByElement, getObject } from "./store/ObjectStore.js";
 import { updatePropertiesPanel, clearPropertiesPanel } from "./properties.js";
 import { updateStatusBar } from "./status.js";
 import { updateLayerPanel } from "./layerPanel.js";

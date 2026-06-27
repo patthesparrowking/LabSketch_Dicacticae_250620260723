@@ -1,5 +1,5 @@
 import { selectElement } from "./selection.js";
-import { getObjectByElement } from "./store/objectStore.js";
+import { getObjectByElement } from "./store/ObjectStore.js";
 import { renderObject } from "./renderer/objectRenderer.js";
 import { snapValue } from "./grid.js";
 import { updatePropertiesPanel } from "./properties.js";

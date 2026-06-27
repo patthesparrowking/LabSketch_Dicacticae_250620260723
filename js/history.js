@@ -1,4 +1,4 @@
-import { getAllObjects } from "./store/objectStore.js";
+import { getAllObjects } from "./store/ObjectStore.js";
 import { loadProjectData } from "./project.js";
 
 let undoStack = [];

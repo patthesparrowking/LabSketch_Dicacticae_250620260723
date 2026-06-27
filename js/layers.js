@@ -1,6 +1,6 @@
 import { canvas, addToCanvas, makeDraggable } from "./canvas.js";
 import { getSelectedObject, selectObject } from "./selection.js";
-import { addObject } from "./store/objectStore.js";
+import { addObject } from "./store/ObjectStore.js";
 import { renderObject } from "./renderer/objectRenderer.js";
 import { LabObject } from "./models/LabObject.js";
 import { createObject } from "./objects.js";

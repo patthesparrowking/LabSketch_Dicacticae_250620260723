@@ -3,7 +3,7 @@ import { createObject } from "./objects.js";
 import { selectObject, clearSelection } from "./selection.js";
 import { renderObject } from "./renderer/objectRenderer.js";
 import { LabObject } from "./models/LabObject.js";
-import { addObject, getAllObjects, clearObjects } from "./store/objectStore.js";
+import { addObject, getAllObjects, clearObjects } from "./store/ObjectStore.js";
 import { updateLayerPanel } from "./layerPanel.js";
 
 export function saveProject() {
