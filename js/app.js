@@ -217,7 +217,7 @@ function createLibraryButton(item) {
   const downloadButton = document.createElement("button");
   downloadButton.className = "tool-download";
   downloadButton.type = "button";
-  downloadButton.textContent = "↓";
+  downloadButton.innerHTML = '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-download"></use></svg>';
   downloadButton.title = `${item.label} herunterladen`;
   downloadButton.setAttribute("aria-label", `${item.label} herunterladen`);
 
@@ -536,7 +536,7 @@ function updateLayerPanel() {
 
     const visible = document.createElement("button");
     visible.className = "layer-action";
-    visible.textContent = object.visible ? "👁" : "—";
+    visible.innerHTML = object.visible ? '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-eye"></use></svg>' : '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-hidden"></use></svg>';
     visible.title = "Sichtbarkeit";
     visible.addEventListener("click", () => {
       commandManager.execute(
@@ -548,7 +548,7 @@ function updateLayerPanel() {
 
     const locked = document.createElement("button");
     locked.className = "layer-action";
-    locked.textContent = object.locked ? "🔒" : "🔓";
+    locked.innerHTML = object.locked ? '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-lock"></use></svg>' : '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-unlock"></use></svg>';
     locked.title = "Sperren";
     locked.addEventListener("click", () => {
       commandManager.execute(

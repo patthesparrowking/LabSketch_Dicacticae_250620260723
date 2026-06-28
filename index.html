@@ -1,204 +1,183 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-  <title>LabSketch Didacticae</title>
+    <title>LabSketch Didacticae</title>
 
-  <link rel="stylesheet" href="css/tokens.css" />
-  <link rel="stylesheet" href="css/layout.css" />
-  <link rel="stylesheet" href="css/panels.css" />
-  <link rel="stylesheet" href="css/buttons.css" />
-  <link rel="stylesheet" href="css/canvas.css" />
-  <link rel="stylesheet" href="css/pocket.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/panels.css" />
+    <link rel="stylesheet" href="css/buttons.css" />
+    <link rel="stylesheet" href="css/canvas.css" />
+    <link rel="stylesheet" href="css/pocket.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
 </head>
 
 <body>
-  <div class="app-shell">
+    <div class="app-shell">
+        <header class="topbar">
 
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-title">LabSketch</span>
-        <span class="brand-subtitle">Didacticae</span>
-      </div>
+            <div class="brand">
+                <span class="brand-title">LabSketch</span>
+                <span class="brand-subtitle">Didacticae</span>
+            </div>
 
-      <div class="topbar-actions">
-        <button id="saveProjectBtn" class="btn">Speichern</button>
-        <button id="loadProjectBtn" class="btn">Laden</button>
-        <button id="exportSvgBtn" class="btn">SVG</button>
-        <button id="exportPngBtn" class="btn primary">PNG</button>
-        <input id="loadProjectInput" type="file" accept=".json" hidden>
-      </div>
-    </header>
+            <div class="topbar-actions">
+                <button id="saveProjectBtn" class="icon-btn" title="Projekt speichern" aria-label="Projekt speichern"> <svg class="icon"><use href="assets/icons/ui-icons.svg#icon-save"></use></svg></button>
+                <button id="loadProjectBtn" class="icon-btn" title="Projekt laden" aria-label="Projekt laden"> <svg class="icon"><use href="assets/icons/ui-icons.svg#icon-open"></use></svg></button>
+                <button id="exportSvgBtn" class="icon-btn" title="SVG exportieren" aria-label="SVG exportieren"> <svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export"></use></svg></button>
+                <button id="exportPngBtn" class="icon-btn primary" title="PNG exportieren" aria-label="PNG exportieren"> PNG</button>
+                <input id="loadProjectInput" type="file" accept=".json" hidden>
+            </div>
+        </header>
 
-    <main class="main-layout">
+        <main class="main-layout">
 
-      <aside class="asset-panel">
-        <div class="sheet-header">
-          <span class="sheet-handle"></span>
-          <button class="sheet-close" data-close-sheet>×</button>
-        </div>
+            <aside class="asset-panel">
+                <div class="sheet-header">
+                  <span class="sheet-handle"></span>
+                  <button class="sheet-close" data-close-sheet>×</button>
+                </div>
 
-        <div class="panel-header">
-          <h2>Objekte</h2>
-          <p>Stationen, Geräte und Symbole</p>
-        </div>
+                <div class="panel-header">
+                  <h2>Objekte</h2>
+                  <p>Stationen, Geräte und Symbole</p>
+                </div>
 
-        <div class="asset-search">
-          <input id="assetSearchInput" type="search" placeholder="Objekte suchen …">
-        </div>
+                <div class="asset-search">
+                  <input id="assetSearchInput" type="search" placeholder="Objekte suchen …">
+                </div>
 
-        <div id="toolList" class="tool-list"></div>
-      </aside>
+                <div id="toolList" class="tool-list"></div>
+            </aside>
 
-      <section class="canvas-area">
-        <div class="desktop-toolbar">
-          <button id="undoBtn" class="icon-btn" title="Rückgängig">↶</button>
-          <button id="redoBtn" class="icon-btn" title="Wiederholen">↷</button>
-          <button id="smallerBtn" class="icon-btn" title="Kleiner">−</button>
-          <button id="biggerBtn" class="icon-btn" title="Größer">+</button>
-          <button id="rotateLeftBtn" class="icon-btn" title="Links drehen">↺</button>
-          <button id="rotateRightBtn" class="icon-btn" title="Rechts drehen">↻</button>
-          <button id="duplicateBtn" class="icon-btn" title="Duplizieren">⧉</button>
-          <button id="deleteBtn" class="icon-btn danger" title="Löschen">⌫</button>
-          <button id="lockBtn" class="icon-btn" title="Sperren">🔒</button>
-          <button id="visibilityBtn" class="icon-btn" title="Sichtbarkeit">👁</button>
-          <button id="frontBtn" class="icon-btn" title="Nach vorne">⬆</button>
-          <button id="backBtn" class="icon-btn" title="Nach hinten">⬇</button>
-          <button id="toggleGridBtn" class="icon-btn is-active" title="Raster">▦</button>
-          <button id="toggleSnapBtn" class="icon-btn is-active" title="Snap">⌗</button>
-          <button id="alignLeftBtn" class="icon-btn" title="Links ausrichten">⟸</button>
-        <button id="alignCenterXBtn" class="icon-btn" title="Horizontal zentrieren">↔</button>
-        <button id="alignRightBtn" class="icon-btn" title="Rechts ausrichten">⟹</button>
-        <button id="alignTopBtn" class="icon-btn" title="Oben ausrichten">⇑</button>
-        <button id="alignCenterYBtn" class="icon-btn" title="Vertikal zentrieren">↕</button>
-        <button id="alignBottomBtn" class="icon-btn" title="Unten ausrichten">⇓</button>
-        </div>
+            <section class="canvas-area">
+                <div class="desktop-toolbar">
+                    <button id="undoBtn" class="icon-btn" title="Rückgängig" aria-label="Rückgängig"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-undo"></use></svg></button>
+                    <button id="redoBtn" class="icon-btn" title="Wiederholen" aria-label="Wiederholen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-redo"></use></svg></button>
+                    <button id="smallerBtn" class="icon-btn" title="Kleiner" aria-label="Kleiner"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-smaller"></use></svg></button>
+                    <button id="biggerBtn" class="icon-btn" title="Größer" aria-label="Größer"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-bigger"></use></svg></button>
+                    <button id="rotateLeftBtn" class="icon-btn" title="Links drehen" aria-label="Links drehen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-rotate-left"></use></svg></button>
+                    <button id="rotateRightBtn" class="icon-btn" title="Rechts drehen" aria-label="Rechts drehen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-rotate-right"></use></svg></button>
+                    <button id="duplicateBtn" class="icon-btn" title="Duplizieren" aria-label="Duplizieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-duplicate"></use></svg></button>
+                    <button id="deleteBtn" class="icon-btn" title="Löschen" aria-label="Löschen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-delete"></use></svg></button>
+                    <button id="lockBtn" class="icon-btn" title="Sperren" aria-label="Sperren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-lock"></use></svg></button>
+                    <button id="visibilityBtn" class="icon-btn" title="Sichtbarkeit" aria-label="Sichtbarkeit"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-eye"></use></svg></button>
+                    <button id="toggleGridBtn" class="icon-btn is-active" title="Raster" aria-label="Raster"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-grid"></use></svg></button>
+                    <button id="toggleSnapBtn" class="icon-btn is-active" title="Snap" aria-label="Snap"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-snap"></use></svg></button>
+                    <button id="saveProjectBtn" class="icon-btn" title="Projekt speichern" aria-label="Projekt speichern"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-save"></use></svg></button>
+                    <button id="loadProjectBtn" class="icon-btn" title="Projekt laden" aria-label="Projekt laden"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-open"></use></svg></button>
+                    <button id="exportSvgBtn" class="icon-btn" title="SVG exportieren" aria-label="SVG exportieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export-svg"></use></svg></button>
+                    <button id="exportPngBtn" class="icon-btn" title="PNG exportieren" aria-label="PNG exportieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export-png"></use></svg></button>
+                    <button id="alignLeftBtn" class="icon-btn" title="Links ausrichten" aria-label="Links ausrichten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-left"></use></svg></button>
+                    <button id="alignCenterXBtn" class="icon-btn" title="Horizontal zentrieren" aria-label="Horizontal zentrieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-center-x"></use></svg></button>
+                    <button id="alignRightBtn" class="icon-btn" title="Rechts ausrichten" aria-label="Rechts ausrichten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-right"></use></svg></button>
+                    <button id="alignTopBtn" class="icon-btn" title="Oben ausrichten" aria-label="Oben ausrichten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-top"></use></svg></button>
+                    <button id="alignCenterYBtn" class="icon-btn" title="Vertikal zentrieren" aria-label="Vertikal zentrieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-center-y"></use></svg></button>
+                    <button id="alignBottomBtn" class="icon-btn" title="Unten ausrichten" aria-label="Unten ausrichten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-bottom"></use></svg></button>
+                </div>
 
-        <div class="pocket-canvas-toolbar">
-          <button id="mobileUndoBtn" class="icon-btn" title="Rückgängig">↶</button>
-          <button id="mobileRedoBtn" class="icon-btn" title="Wiederholen">↷</button>
-          <button id="mobileDuplicateBtn" class="icon-btn" title="Duplizieren">⧉</button>
-          <button id="mobileDeleteBtn" class="icon-btn danger" title="Löschen">⌫</button>
-        </div>
+                <div class="pocket-canvas-toolbar">
+                  <button id="mobileUndoBtn" class="icon-btn" title="Rückgängig" aria-label="Rückgängig"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-undo"></use></svg></button>
+                  <button id="mobileRedoBtn" class="icon-btn" title="Wiederholen" aria-label="Wiederholen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-redo"></use></svg></button>
+                  <button id="mobileDuplicateBtn" class="icon-btn" title="Duplizieren" aria-label="Duplizieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-duplicate"></use></svg></button>
+                  <button id="mobileDeleteBtn" class="icon-btn" title="Löschen" aria-label="Löschen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-delete"></use></svg></button>
+                </div>
 
-        <div class="canvas-wrapper">
-          <svg id="canvas" viewBox="0 0 1000 700">
-            <defs>
-              <pattern id="gridPattern" width="25" height="25" patternUnits="userSpaceOnUse">
-                <path d="M 25 0 L 0 0 0 25"
-                      fill="none"
-                      stroke="#d8cfaf"
-                      stroke-width="1" />
-              </pattern>
-            </defs>
+                <div class="canvas-wrapper">
+                  <svg id="canvas" viewBox="0 0 1000 700">
+                    <defs>
+                      <pattern id="gridPattern" width="25" height="25" patternUnits="userSpaceOnUse">
+                        <path d="M 25 0 L 0 0 0 25"
+                              fill="none"
+                              stroke="#d8cfaf"
+                              stroke-width="1" />
+                      </pattern>
+                    </defs>
 
-            <rect id="background" width="1000" height="700" fill="#ffffff" />
-            <rect id="grid" width="1000" height="700" fill="url(#gridPattern)" opacity="0.45" />
-          </svg>
-        </div>
+                    <rect id="background" width="1000" height="700" fill="#ffffff" />
+                    <rect id="grid" width="1000" height="700" fill="url(#gridPattern)" opacity="0.45" />
+                  </svg>
+                </div>
 
-        <div class="statusbar">
-          <span id="selectedStatus">Ausgewählt: nichts</span>
-          <span id="gridStatus">Raster: an</span>
-          <span id="snapStatus">Snap: an</span>
-        </div>
-      </section>
+                <div class="statusbar">
+                    <span id="selectedStatus">Ausgewählt: nichts</span>
+                    <span id="gridStatus">Raster: an</span>
+                    <span id="snapStatus">Snap: an</span>
+                </div>
+            </section>
 
-      <aside class="properties-panel">
-        <div class="sheet-header">
-          <span class="sheet-handle"></span>
-          <button class="sheet-close" data-close-sheet>×</button>
-        </div>
+            <aside class="properties-panel">
+                <div class="sheet-header">
+                    <span class="sheet-handle"></span>
+                    <button class="sheet-close" data-close-sheet>×</button>
+                </div>
 
-        <div class="panel-header">
-          <h2>Bearbeiten</h2>
-          <p>Ausgewähltes Objekt</p>
-        </div>
+                <div class="panel-header">
+                    <h2>Bearbeiten</h2>
+                    <p>Ausgewähltes Objekt</p>
+                </div>
 
-        <div class="mobile-edit-actions">
-          <button id="mobileSmallerBtn" class="icon-btn" title="Kleiner">−</button>
-          <button id="mobileBiggerBtn" class="icon-btn" title="Größer">+</button>
-          <button id="mobileRotateLeftBtn" class="icon-btn" title="Links drehen">↺</button>
-          <button id="mobileRotateRightBtn" class="icon-btn" title="Rechts drehen">↻</button>
-          <button id="mobileLockBtn" class="icon-btn" title="Sperren">🔒</button>
-          <button id="mobileVisibilityBtn" class="icon-btn" title="Ausblenden">👁</button>
-        </div>
+                <div class="mobile-edit-actions">
+                    <button id="mobileSmallerBtn" class="icon-btn" title="Kleiner" aria-label="Kleiner"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-smaller"></use></svg></button>
+                    <button id="mobileBiggerBtn" class="icon-btn" title="Größer" aria-label="Größer"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-bigger"></use></svg></button>
+                    <button id="mobileRotateLeftBtn" class="icon-btn" title="Links drehen" aria-label="Links drehen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-rotate-left"></use></svg></button>
+                    <button id="mobileRotateRightBtn" class="icon-btn" title="Rechts drehen" aria-label="Rechts drehen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-rotate-right"></use></svg></button>
+                    <button id="mobileLockBtn" class="icon-btn" title="Sperren" aria-label="Sperren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-lock"></use></svg></button>
+                    <button id="mobileVisibilityBtn" class="icon-btn" title="Ausblenden" aria-label="Ausblenden"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-eye"></use></svg></button>
+                </div>
 
-        <div class="property-grid">
-          <label>
-            Name
-            <input id="nameInput" type="text">
-          </label>
+                <div class="property-grid">
+                    <label> Name <input id="nameInput" type="text"></label>
+                    <label> X <input id="posXInput" type="number"></label>
+                    <label> Y <input id="posYInput" type="number"></label>
+                    <label> Größe <input id="scaleInput" type="number" step="0.1" min="0.1"></label>
+                    <label> Rotation <input id="rotationInput" type="number"></label>
+                    <label id="textProperty" class="full"> Text <input id="textInput" type="text"></label>
+                </div>
 
-          <label>
-            X
-            <input id="posXInput" type="number">
-          </label>
+                <div class="layers-panel" id="layersPanel">
+                    <h3>Ebenen</h3>
+                    <div id="layersList" class="layers-list"></div>
+                </div>
+            </aside>
 
-          <label>
-            Y
-            <input id="posYInput" type="number">
-          </label>
+            <aside id="pocketMoreSheet" class="pocket-sheet">
+                <div class="sheet-header">
+                    <span class="sheet-handle"></span>
+                    <button class="sheet-close" data-close-sheet>×</button>
+                </div>
 
-          <label>
-            Größe
-            <input id="scaleInput" type="number" step="0.1" min="0.1">
-          </label>
+                <div class="panel-header">
+                    <h2>Mehr</h2>
+                    <p>Projekt, Export und Ansicht</p>
+                </div>
 
-          <label>
-            Rotation
-            <input id="rotationInput" type="number">
-          </label>
+                <div class="pocket-more-grid">
+                    <button id="mobileSaveProjectBtn" class="icon-btn" title="Projekt speichern" aria-label="Projekt speichern"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-save"></use></svg></button>
+                    <button id="mobileLoadProjectBtn" class="icon-btn" title="Projekt laden" aria-label="Projekt laden"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-open"></use></svg></button>
+                    <button id="mobileExportSvgBtn" class="icon-btn" title="SVG exportieren" aria-label="SVG exportieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export-svg"></use></svg></button>
+                    <button id="mobileExportPngBtn" class="icon-btn" title="PNG exportieren" aria-label="PNG exportieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export-png"></use></svg></button>
+                    <button id="mobileGridBtn" class="icon-btn is-active" title="Raster" aria-label="Raster"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-grid"></use></svg></button>
+                    <button id="mobileSnapBtn" class="icon-btn is-active" title="Snap" aria-label="Snap"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-snap"></use></svg></button>
+                    <button id="mobileAlignCenterXBtn" class="icon-btn" title="Horizontal zentrieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-center-x"></use></svg></button>
+                    <button id="mobileAlignCenterYBtn" class="icon-btn" title="Vertikal zentrieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-center-y"></use></svg></button>
+                </div>
+            </aside>
 
-          <label id="textProperty" class="full">
-            Text
-            <input id="textInput" type="text">
-          </label>
-        </div>
+        </main>
 
-        <div class="layers-panel" id="layersPanel">
-          <h3>Ebenen</h3>
-          <div id="layersList" class="layers-list"></div>
-        </div>
-      </aside>
+        <nav class="pocket-dock">
+            <button data-pocket-panel="assets" title="Objekte" aria-label="Objekte"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-assets"></use></svg></button>
+            <button data-pocket-panel="edit" title="Bearbeiten" aria-label="Bearbeiten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-edit"></use></svg></button>
+            <button data-pocket-panel="layers" title="Ebenen" aria-label="Ebenen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-layers"></use></svg></button>
+            <button data-pocket-panel="more" title="Mehr" aria-label="Mehr"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-more"></use></svg></button>
+        </nav>
 
-      <aside id="pocketMoreSheet" class="pocket-sheet">
-        <div class="sheet-header">
-          <span class="sheet-handle"></span>
-          <button class="sheet-close" data-close-sheet>×</button>
-        </div>
-
-        <div class="panel-header">
-          <h2>Mehr</h2>
-          <p>Projekt, Export und Ansicht</p>
-        </div>
-
-        <div class="pocket-more-grid">
-          <button id="mobileSaveProjectBtn" class="icon-btn" title="Projekt speichern">💾</button>
-          <button id="mobileLoadProjectBtn" class="icon-btn" title="Projekt laden">📂</button>
-          <button id="mobileExportSvgBtn" class="icon-btn" title="SVG exportieren">SVG</button>
-          <button id="mobileExportPngBtn" class="icon-btn primary" title="PNG exportieren">PNG</button>
-          <button id="mobileGridBtn" class="icon-btn is-active" title="Raster">▦</button>
-          <button id="mobileSnapBtn" class="icon-btn is-active" title="Snap">⌗</button>
-          <button id="mobileAlignCenterXBtn" class="icon-btn" title="Horizontal zentrieren">↔</button>
-          <button id="mobileAlignCenterYBtn" class="icon-btn" title="Vertikal zentrieren">↕</button>
-        </div>
-      </aside>
-
-    </main>
-
-    <nav class="pocket-dock">
-      <button data-pocket-panel="assets" title="Objekte" aria-label="Objekte">◫</button>
-      <button data-pocket-panel="edit" title="Bearbeiten" aria-label="Bearbeiten">✦</button>
-      <button data-pocket-panel="layers" title="Ebenen" aria-label="Ebenen">▤</button>
-      <button data-pocket-panel="more" title="Mehr" aria-label="Mehr">•••</button>
-    </nav>
-
-    <div id="pocketOverlay" class="pocket-overlay"></div>
-  </div>
+        <div id="pocketOverlay" class="pocket-overlay"></div>
+    </div>
 
   <script type="module" src="js/app.js"></script>
 </body>

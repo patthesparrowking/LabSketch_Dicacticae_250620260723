@@ -1,4 +1,4 @@
-import { MoveObjectCommand } from "../commands/MoveObjectCommand.js";
+import { MoveObjectsCommand } from "../commands/MoveObjectsCommand.js";
 
 export class CanvasController {
   constructor({
@@ -15,10 +15,8 @@ export class CanvasController {
     this.selectionController = selectionController;
 
     this.draggedObject = null;
-    this.startX = 0;
-    this.startY = 0;
-    this.offsetX = 0;
-    this.offsetY = 0;
+    this.dragStartPoint = null;
+    this.initialPositions = [];
 
     this.snapEnabled = true;
     this.gridSize = 25;
@@ -36,12 +34,16 @@ export class CanvasController {
       }
 
       const object = this.objectStore.get(element.dataset.objectId);
-
       if (!object || object.locked) return;
 
       if (event.shiftKey) {
         this.selectionController.toggle(object.id);
-      } else {
+        return;
+      }
+
+      const alreadySelected = this.selectionController.selectedIds.has(object.id);
+
+      if (!alreadySelected) {
         this.selectionController.selectOnly(object.id);
       }
 
@@ -53,14 +55,17 @@ export class CanvasController {
     event.stopPropagation();
 
     this.draggedObject = object;
+    this.dragStartPoint = this.getMousePosition(event);
 
-    const point = this.getMousePosition(event);
+    const selectedObjects = this.selectionController
+      .getSelectedObjects()
+      .filter(selected => !selected.locked);
 
-    this.startX = object.x;
-    this.startY = object.y;
-
-    this.offsetX = point.x - object.x;
-    this.offsetY = point.y - object.y;
+    this.initialPositions = selectedObjects.map(selected => ({
+      objectId: selected.id,
+      x: selected.x,
+      y: selected.y
+    }));
 
     element.setPointerCapture(event.pointerId);
 
@@ -69,48 +74,61 @@ export class CanvasController {
   }
 
   drag = event => {
-    if (!this.draggedObject) return;
+    if (!this.draggedObject || !this.dragStartPoint) return;
 
     const point = this.getMousePosition(event);
 
-    const x = this.snapValue(point.x - this.offsetX);
-    const y = this.snapValue(point.y - this.offsetY);
+    const dx = point.x - this.dragStartPoint.x;
+    const dy = point.y - this.dragStartPoint.y;
 
-    this.objectStore.update(this.draggedObject.id, { x, y });
+    this.initialPositions.forEach(start => {
+      const x = this.snapValue(start.x + dx);
+      const y = this.snapValue(start.y + dy);
+
+      this.objectStore.update(start.objectId, { x, y });
+    });
   };
 
   endDrag = event => {
     if (!this.draggedObject?.element) return;
 
-    const object = this.draggedObject;
-    const element = object.element;
+    const element = this.draggedObject.element;
 
     element.releasePointerCapture(event.pointerId);
     element.removeEventListener("pointermove", this.drag);
     element.removeEventListener("pointerup", this.endDrag);
 
-    const moved =
-      object.x !== this.startX ||
-      object.y !== this.startY;
+    const moves = this.initialPositions
+      .map(start => {
+        const object = this.objectStore.get(start.objectId);
+        if (!object) return null;
 
-    if (moved) {
-      this.commandManager.execute(
-        new MoveObjectCommand(
-          this.objectStore,
-          object.id,
-          {
-            x: this.startX,
-            y: this.startY
+        return {
+          objectId: object.id,
+          from: {
+            x: start.x,
+            y: start.y
           },
-          {
+          to: {
             x: object.x,
             y: object.y
           }
-        )
+        };
+      })
+      .filter(move =>
+        move &&
+        (move.from.x !== move.to.x || move.from.y !== move.to.y)
+      );
+
+    if (moves.length > 0) {
+      this.commandManager.execute(
+        new MoveObjectsCommand(this.objectStore, moves)
       );
     }
 
     this.draggedObject = null;
+    this.dragStartPoint = null;
+    this.initialPositions = [];
   };
 
   getMousePosition(event) {
@@ -132,13 +150,5 @@ export class CanvasController {
 
   setSnapEnabled(value) {
     this.snapEnabled = value;
-  }
-
-  toggleSnap() {
-    this.snapEnabled = !this.snapEnabled;
-
-    this.eventBus.emit("snap:changed", {
-      enabled: this.snapEnabled
-    });
   }
 }

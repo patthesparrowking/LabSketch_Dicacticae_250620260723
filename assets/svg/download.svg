@@ -1,0 +1,5 @@
+<circle cx="15" cy="3" r="0.5" style="fill:rgb(203,203,203);stroke:rgb(203,203,203);stroke-width:1px;stroke-dasharray:0,0.05,0,0,0,0;"/>
+<circle cx="15" cy="7" r="0.5" style="fill:rgb(203,203,203);stroke:rgb(203,203,203);stroke-width:1px;stroke-dasharray:0,0.05,0,0,0,0;"/>
+<path d="M15,23L20,16L10,16L15,23Z" style="fill:rgb(203,203,203);stroke:rgb(203,203,203);stroke-width:2px;stroke-dasharray:0,0.1,0,0,0,0;"/>
+<path d="M15,11L15,16" style="fill:none;stroke:rgb(203,203,203);stroke-width:2px;"/>
+<path d="M26,19L26,26L4,26L4,19" style="fill:none;stroke:rgb(235,235,235);stroke-width:2px;"/>

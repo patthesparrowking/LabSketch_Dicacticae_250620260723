@@ -150,6 +150,7 @@
   border: 1px solid rgba(175, 150, 92, 0.55);
   border-radius: var(--radius-sm);
   background: var(--color-surface-soft);
+    background: rgb(69, 69, 69);
   color: var(--color-primary);
   cursor: pointer;
 }
