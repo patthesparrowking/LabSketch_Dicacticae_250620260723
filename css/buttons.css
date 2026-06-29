@@ -81,12 +81,12 @@ button {
 }
 
 .icon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   /* fill: none; */
   /* stroke: currentColor; */
   /* stroke-width: 2.2; */
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
   pointer-events: none;
 }
