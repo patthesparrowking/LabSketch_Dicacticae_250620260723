@@ -1,9 +1,9 @@
 export class UpdateObjectCommand {
-  constructor(objectStore, objectId, patch) {
+  constructor(objectStore, objectId, patch, previousState = null) {
     this.objectStore = objectStore;
     this.objectId = objectId;
     this.patch = patch;
-    this.previousState = null;
+    this.previousState = previousState;
   }
 
   execute() {
@@ -13,9 +13,23 @@ export class UpdateObjectCommand {
     if (!this.previousState) {
       this.previousState = {
         name: object.name,
-        text: object.text,
+        x: object.x,
+        y: object.y,
+        x2: object.x2,
+        y2: object.y2,
+        scale: object.scale,
+        rotation: object.rotation,
         visible: object.visible,
-        locked: object.locked
+        locked: object.locked,
+        groupId: object.groupId,
+        text: object.text,
+        strokeWidth: object.strokeWidth,
+        strokeColor: object.strokeColor,
+        arrowEnd: object.arrowEnd,
+        path: object.path,
+        station: object.station,
+        tags: object.tags,
+        metadata: object.metadata
       };
     }
 

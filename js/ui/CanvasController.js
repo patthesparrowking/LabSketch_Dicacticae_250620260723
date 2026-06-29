@@ -1,20 +1,24 @@
 import { MoveObjectsCommand } from "../commands/MoveObjectsCommand.js";
 
 export class CanvasController {
-  constructor({
-    canvas,
-    objectStore,
-    commandManager,
-    eventBus,
-    selectionController
-  }) {
-    this.canvas = canvas;
-    this.objectStore = objectStore;
-    this.commandManager = commandManager;
-    this.eventBus = eventBus;
-    this.selectionController = selectionController;
+constructor({
+  canvas,
+  objectStore,
+  commandManager,
+  eventBus,
+  selectionController,
+  smartGuideController,
+  anchorSnapController
+}) {
+  this.canvas = canvas;
+  this.objectStore = objectStore;
+  this.commandManager = commandManager;
+  this.eventBus = eventBus;
+  this.selectionController = selectionController;
+  this.smartGuideController = smartGuideController;
+  this.anchorSnapController = anchorSnapController;
 
-    this.draggedObject = null;
+  this.draggedObject = null;
     this.dragStartPoint = null;
     this.initialPositions = [];
 
@@ -26,6 +30,10 @@ export class CanvasController {
 
   init() {
     this.canvas.addEventListener("pointerdown", event => {
+
+      if (this.canvas.dataset.interaction === "selection-box") {
+  return;
+}
       const element = event.target.closest("[data-object-id]");
 
       if (!element) {
@@ -36,16 +44,25 @@ export class CanvasController {
       const object = this.objectStore.get(element.dataset.objectId);
       if (!object || object.locked) return;
 
-      if (event.shiftKey) {
-        this.selectionController.toggle(object.id);
-        return;
-      }
+if (event.shiftKey) {
+  if (object.groupId) {
+    this.selectionController.toggleGroup(object.groupId);
+  } else {
+    this.selectionController.toggle(object.id);
+  }
 
-      const alreadySelected = this.selectionController.selectedIds.has(object.id);
+  return;
+}
 
-      if (!alreadySelected) {
-        this.selectionController.selectOnly(object.id);
-      }
+const alreadySelected = this.selectionController.selectedIds.has(object.id);
+
+if (!alreadySelected) {
+  if (object.groupId) {
+    this.selectionController.selectGroup(object.groupId);
+  } else {
+    this.selectionController.selectOnly(object.id);
+  }
+}
 
       this.startDrag(event, object, element);
     });
@@ -81,12 +98,52 @@ export class CanvasController {
     const dx = point.x - this.dragStartPoint.x;
     const dy = point.y - this.dragStartPoint.y;
 
-    this.initialPositions.forEach(start => {
-      const x = this.snapValue(start.x + dx);
-      const y = this.snapValue(start.y + dy);
+let guideOffset = { dx: 0, dy: 0 };
 
-      this.objectStore.update(start.objectId, { x, y });
-    });
+if (this.smartGuideController) {
+  const movingObjects = this.initialPositions
+    .map(start => this.objectStore.get(start.objectId))
+    .filter(Boolean);
+
+  const temporaryObjects = movingObjects.map(object => {
+    const start = this.initialPositions.find(
+      item => item.objectId === object.id
+    );
+
+    return {
+      ...object,
+      x: this.snapValue(start.x + dx),
+      y: this.snapValue(start.y + dy)
+    };
+  });
+
+  const selectionBox =
+    this.smartGuideController.createBoxFromObjects(temporaryObjects);
+
+  guideOffset = this.smartGuideController.snapBox(
+    selectionBox,
+    this.initialPositions.map(start => start.objectId)
+  );
+}
+
+this.initialPositions.forEach(start => {
+  let x = this.snapValue(start.x + dx) + guideOffset.dx;
+  let y = this.snapValue(start.y + dy) + guideOffset.dy;
+
+  const object = this.objectStore.get(start.objectId);
+
+  if (
+    object &&
+    this.anchorSnapController &&
+    this.initialPositions.length === 1
+  ) {
+    const snapped = this.anchorSnapController.snapObject(object, x, y);
+    x = snapped.x;
+    y = snapped.y;
+  }
+
+  this.objectStore.update(start.objectId, { x, y });
+});
   };
 
   endDrag = event => {
@@ -126,6 +183,9 @@ export class CanvasController {
       );
     }
 
+    this.smartGuideController?.clearGuides();
+    this.anchorSnapController?.clearPreview();
+    this.anchorSnapController?.clearHighlights();
     this.draggedObject = null;
     this.dragStartPoint = null;
     this.initialPositions = [];
@@ -151,4 +211,8 @@ export class CanvasController {
   setSnapEnabled(value) {
     this.snapEnabled = value;
   }
+
+  setGridSize(size) {
+  this.gridSize = size;
+}
 }

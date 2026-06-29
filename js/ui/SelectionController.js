@@ -23,6 +23,40 @@ export class SelectionController {
     this.emitChange();
   }
 
+  selectGroup(groupId) {
+  this.clear();
+
+  this.objectStore.getAll().forEach(object => {
+    if (object.groupId === groupId) {
+      this.selectedIds.add(object.id);
+    }
+  });
+
+  this.updateDomSelection();
+  this.emitChange();
+}
+
+toggleGroup(groupId) {
+  const groupObjects = this.objectStore
+    .getAll()
+    .filter(object => object.groupId === groupId);
+
+  const allSelected = groupObjects.every(object =>
+    this.selectedIds.has(object.id)
+  );
+
+  groupObjects.forEach(object => {
+    if (allSelected) {
+      this.selectedIds.delete(object.id);
+    } else {
+      this.selectedIds.add(object.id);
+    }
+  });
+
+  this.updateDomSelection();
+  this.emitChange();
+}
+
   clear() {
     this.selectedIds.clear();
     this.updateDomSelection();

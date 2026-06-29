@@ -19,12 +19,35 @@ import { AlignController } from "./ui/AlignController.js";
 
 import { initPocketUi } from "./pocketUi.js";
 
+import { AddObjectsCommand } from "./commands/AddObjectsCommand.js";
+import { DeleteObjectsCommand } from "./commands/DeleteObjectsCommand.js";
+import { DistributeController } from "./ui/DistributeController.js";
+
+import { GroupObjectsCommand } from "./commands/GroupObjectsCommand.js";
+import { UngroupObjectsCommand } from "./commands/UngroupObjectsCommand.js";
+
+import { GroupStore } from "./store/GroupStore.js";
+import { UpdateObjectsCommand } from "./commands/UpdateObjectsCommand.js";
+import { ArrowTool } from "./ui/ArrowTool.js";
+import { ArrowHandleController } from "./ui/ArrowHandleController.js";
+import { LineTool } from "./ui/LineTool.js";
+import { ToolManager } from "./ui/ToolManager.js";
+import { SelectionHandlesController } from "./ui/SelectionHandlesController.js";
+import { SelectionBoxController } from "./ui/SelectionBoxController.js";
+import { SmartGuideController } from "./ui/SmartGuideController.js";
+import { GuideSettingsController } from "./ui/GuideSettingsController.js";
+import { AnchorController } from "./ui/AnchorController.js";
+import { AnchorSnapController } from "./ui/AnchorSnapController.js";
+import { GeometryService } from "./services/GeometryService.js";
+
 const canvas = document.getElementById("canvas");
+const geometryService = new GeometryService(canvas);
 const toolList = document.getElementById("toolList");
 const assetSearchInput = document.getElementById("assetSearchInput");
 
 const eventBus = new EventBus();
 const objectStore = new ObjectStore(eventBus);
+const groupStore = new GroupStore(eventBus);
 const commandManager = new CommandManager(eventBus);
 
 const libraryService = new LibraryService();
@@ -32,7 +55,8 @@ const objectFactory = new ObjectFactory(libraryService);
 
 const renderer = new SvgRenderer({
   canvas,
-  eventBus
+  eventBus,
+  objectStore
 });
 
 const selectionController = new SelectionController({
@@ -40,23 +64,108 @@ const selectionController = new SelectionController({
   eventBus
 });
 
+const smartGuideController = new SmartGuideController({
+  canvas,
+  objectStore
+});
+
+const anchorController = new AnchorController({
+  canvas,
+  eventBus,
+  selectionController
+});
+
+const anchorSnapController = new AnchorSnapController({
+  objectStore,
+  anchorController
+});
+
 const canvasController = new CanvasController({
   canvas,
   objectStore,
   commandManager,
   eventBus,
+  selectionController,
+  smartGuideController,
+  anchorSnapController
+});
+
+const guideSettingsController = new GuideSettingsController({
+  canvasController,
+  smartGuideController
+});
+
+const selectionHandlesController = new SelectionHandlesController({
+  canvas,
+  eventBus,
+  selectionController,
+  objectStore,
+  commandManager,
+  geometryService
+});
+
+
+
+
+
+const selectionBoxController = new SelectionBoxController({
+  canvas,
+  objectStore,
   selectionController
 });
+
+const arrowHandleController = new ArrowHandleController({
+  canvas,
+  objectStore,
+  commandManager,
+  eventBus,
+  getSelectedObject,
+  anchorSnapController
+});
+
+const arrowTool = new ArrowTool({
+  canvas,
+  objectStore,
+  commandManager,
+  eventBus,
+  anchorSnapController
+});
+
+const lineTool = new LineTool({
+  canvas,
+  objectStore,
+  commandManager,
+  eventBus
+});
+
+const toolManager = new ToolManager({ eventBus });
+
+toolManager.registerTool("line", lineTool);
+toolManager.registerTool("arrow", arrowTool);
 
 const gridController = new GridController({
   canvasController,
   eventBus
 });
 
+
+
+// const alignController = new AlignController({
+//   objectStore,
+//   commandManager,
+//   getSelectedObject
+// });
+
 const alignController = new AlignController({
   objectStore,
   commandManager,
-  getSelectedObject
+  getSelectedObjects
+});
+
+const distributeController = new DistributeController({
+  objectStore,
+  commandManager,
+  getSelectedObjects
 });
 
 init();
@@ -98,10 +207,25 @@ function bindEvents() {
     }
   });
 
+  eventBus.on("groups:changed", () => {
+  updateLayerPanel();
+});
+
+eventBus.on("tool:changed", ({ tool }) => {
+  document.getElementById("lineToolBtn")?.classList.toggle("is-active", tool === "line");
+  document.getElementById("arrowToolBtn")?.classList.toggle("is-active", tool === "arrow");
+});
+
   eventBus.on("object:updated", () => {
     updatePropertiesPanel();
     updateStatusBar();
   });
+
+  eventBus.on("tool:changed", ({ tool }) => {
+  document
+    .getElementById("arrowToolBtn")
+    ?.classList.toggle("is-active", tool === "arrow");
+});
 
   eventBus.on("objects:changed", () => {
     updateLayerPanel();
@@ -287,6 +411,13 @@ function bindToolbar() {
     document.getElementById("loadProjectInput")?.click();
   });
 
+  bindClick("arrowToolBtn", () => {
+  arrowTool.toggle();
+});
+
+  bindClick("groupBtn", groupSelected);
+bindClick("ungroupBtn", ungroupSelected);
+
   document.getElementById("loadProjectInput")?.addEventListener("change", loadProjectFile);
 
   bindClick("frontBtn", moveSelectedToFront);
@@ -302,7 +433,89 @@ function bindToolbar() {
   bindClick("mobileAlignCenterXBtn", () => alignController.alignCenterX());
   bindClick("mobileAlignCenterYBtn", () => alignController.alignCenterY());
 
+  bindClick("distributeHorizontalBtn", () => {
+  distributeController.distributeHorizontal();
+});
+
+bindClick("distributeVerticalBtn", () => {
+  distributeController.distributeVertical();
+});
+
+bindClick("lineToolBtn", () => {
+  lineTool.toggle();
+});
+
+bindClick("arrowToolBtn", () => {
+  arrowTool.toggle();
+});
+
+bindClick("lineToolBtn", () => {
+  toolManager.activateTool("line");
+});
+
+bindClick("arrowToolBtn", () => {
+  toolManager.activateTool("arrow");
+});
+bindClick("toggleSmartGuidesBtn", toggleSmartGuides);
+bindClick("mobileSmartGuidesBtn", toggleSmartGuides);
+bindClick("toggleAnchorSnapBtn", toggleAnchorSnap);
+bindClick("mobileAnchorSnapBtn", toggleAnchorSnap);
+bindClick("detachStartAnchorBtn", detachStartAnchor);
+bindClick("detachEndAnchorBtn", detachEndAnchor);
+
   document.addEventListener("keydown", handleShortcuts);
+}
+
+function detachStartAnchor() {
+  const object = getSelectedObject();
+
+  if (!object || !(object.type === "line" || object.type === "arrow")) return;
+  if (!object.startAnchorRef) return;
+
+  const startPoint = renderer.getConnectedStartPoint(object);
+
+  commandManager.execute(
+    new UpdateObjectCommand(objectStore, object.id, {
+      x: startPoint.x,
+      y: startPoint.y,
+      startAnchorRef: null
+    })
+  );
+}
+
+function detachEndAnchor() {
+  const object = getSelectedObject();
+
+  if (!object || !(object.type === "line" || object.type === "arrow")) return;
+  if (!object.endAnchorRef) return;
+
+  const endPoint = renderer.getConnectedEndPoint(object);
+
+  commandManager.execute(
+    new UpdateObjectCommand(objectStore, object.id, {
+      x2: endPoint.x,
+      y2: endPoint.y,
+      endAnchorRef: null
+    })
+  );
+}
+
+function toggleAnchorSnap() {
+  const enabled = anchorSnapController.toggle();
+
+  setActive("toggleAnchorSnapBtn", enabled);
+  setActive("mobileAnchorSnapBtn", enabled);
+
+  updateStatusBar();
+}
+
+function toggleSmartGuides() {
+  const enabled = smartGuideController.toggle();
+
+  setActive("toggleSmartGuidesBtn", enabled);
+  setActive("mobileSmartGuidesBtn", enabled);
+
+  updateStatusBar();
 }
 
 function bindClick(id, callback) {
@@ -310,14 +523,20 @@ function bindClick(id, callback) {
 }
 
 function bindPropertyInputs() {
-  const inputs = [
-    "nameInput",
-    "posXInput",
-    "posYInput",
-    "scaleInput",
-    "rotationInput",
-    "textInput"
-  ];
+const inputs = [
+  "nameInput",
+  "posXInput",
+  "posYInput",
+  "posX2Input",
+  "posY2Input",
+  "scaleInput",
+  "rotationInput",
+  "strokeWidthInput",
+  "strokeColorInput",
+  "textInput",
+  "arrowEndInput",
+  "lineStyleSelect",
+];
 
   inputs.forEach(id => {
     document.getElementById(id)?.addEventListener("change", updateSelectedFromProperties);
@@ -334,18 +553,67 @@ function getSelectedObjects() {
 
 function deleteSelected() {
   const objects = getSelectedObjects();
+  if (objects.length === 0) return;
 
-  objects.forEach(object => {
-    commandManager.execute(new DeleteObjectCommand(objectStore, object));
+  commandManager.execute(
+    new DeleteObjectsCommand(objectStore, objects)
+  );
+
+  cleanupEmptyGroups();
+
+  clearSelection();
+}
+
+function cleanupEmptyGroups() {
+  groupStore.getAll().forEach(group => {
+    const hasObjects = objectStore
+      .getAll()
+      .some(object => object.groupId === group.id);
+
+    if (!hasObjects) {
+      groupStore.removeGroup(group.id);
+    }
   });
 }
 
 function duplicateSelected() {
   const objects = getSelectedObjects();
+  if (objects.length === 0) return;
 
-  objects.forEach(object => {
+  const groupMap = new Map();
+
+  const clones = objects.map(object => {
     const clone = object.clone();
-    commandManager.execute(new AddObjectCommand(objectStore, clone));
+
+    if (object.groupId) {
+      if (!groupMap.has(object.groupId)) {
+        groupMap.set(object.groupId, crypto.randomUUID());
+      }
+
+      clone.groupId = groupMap.get(object.groupId);
+    }
+
+    return clone;
+  });
+
+  groupMap.forEach((newGroupId, oldGroupId) => {
+    const oldGroup = groupStore.get(oldGroupId);
+
+    groupStore.createGroup({
+      id: newGroupId,
+      name: oldGroup ? `${oldGroup.name} Kopie` : "Gruppe Kopie",
+      collapsed: false
+    });
+  });
+
+  commandManager.execute(
+    new AddObjectsCommand(objectStore, clones)
+  );
+
+  selectionController.clear();
+
+  clones.forEach(clone => {
+    selectionController.toggle(clone.id);
   });
 }
 
@@ -448,6 +716,51 @@ function updateSelectedFromProperties() {
     )
   };
 
+  if (object.type === "line" || object.type === "arrow") {
+  patch.x2 = safeNumber(
+    getInputValue("posX2Input", object.x2),
+    object.x2
+  );
+
+  patch.y2 = safeNumber(
+    getInputValue("posY2Input", object.y2),
+    object.y2
+  );
+
+  patch.strokeWidth = Math.max(
+    1,
+    safeNumber(
+      getInputValue("strokeWidthInput", object.strokeWidth),
+      object.strokeWidth
+    )
+  );
+
+  const arrowEndInput = document.getElementById("arrowEndInput");
+
+patch.arrowEnd = arrowEndInput?.checked || false;
+
+
+  patch.strokeColor =
+    getInputValue("strokeColorInput", object.strokeColor) ||
+    object.strokeColor;
+
+    const lineStyle = getInputValue("lineStyleSelect", object.lineStyle || "solid");
+
+patch.lineStyle = lineStyle;
+
+if (lineStyle === "solid") {
+  patch.strokeDasharray = "";
+}
+
+if (lineStyle === "dashed") {
+  patch.strokeDasharray = "14 10";
+}
+
+if (lineStyle === "dotted") {
+  patch.strokeDasharray = "2 10";
+}
+}
+
   if (object.type === "label") {
     patch.text = getInputValue("textInput", object.text || "Beschriftung");
   }
@@ -466,27 +779,66 @@ function updatePropertiesPanel() {
   const posYInput = document.getElementById("posYInput");
   const scaleInput = document.getElementById("scaleInput");
   const rotationInput = document.getElementById("rotationInput");
+
   const textInput = document.getElementById("textInput");
   const textProperty = document.getElementById("textProperty");
 
-  if (!object) {
-    [nameInput, posXInput, posYInput, scaleInput, rotationInput, textInput]
-      .forEach(input => {
-        if (input) input.value = "";
-      });
+  const posX2Input = document.getElementById("posX2Input");
+  const posY2Input = document.getElementById("posY2Input");
+  const strokeWidthInput = document.getElementById("strokeWidthInput");
+  const strokeColorInput = document.getElementById("strokeColorInput");
+  const lineStyleSelect = document.getElementById("lineStyleSelect");
+  const arrowEndInput = document.getElementById("arrowEndInput");
+  const lineProperties = document.querySelectorAll(".line-property");
 
-    if (textProperty) {
-      textProperty.style.display = "none";
-    }
+  const detachStartAnchorBtn = document.getElementById("detachStartAnchorBtn");
+  const detachEndAnchorBtn = document.getElementById("detachEndAnchorBtn");
+
+  const allInputs = [
+    nameInput,
+    posXInput,
+    posYInput,
+    posX2Input,
+    posY2Input,
+    scaleInput,
+    rotationInput,
+    strokeWidthInput,
+    strokeColorInput,
+    lineStyleSelect,
+    textInput,
+    arrowEndInput
+  ];
+
+  if (!object) {
+    allInputs.forEach(input => {
+      if (!input) return;
+
+      if (input.type === "checkbox") {
+        input.checked = false;
+      } else {
+        input.value = "";
+      }
+    });
+
+    lineProperties.forEach(element => {
+      element.style.display = "none";
+    });
+
+    if (textProperty) textProperty.style.display = "none";
+    if (detachStartAnchorBtn) detachStartAnchorBtn.disabled = true;
+    if (detachEndAnchorBtn) detachEndAnchorBtn.disabled = true;
 
     return;
   }
 
+  const isMultiSelection = selectedObjects.length > 1;
+  const isLineObject = object.type === "line" || object.type === "arrow";
+  const isLabelObject = object.type === "label";
+
   if (nameInput) {
-    nameInput.value =
-      selectedObjects.length > 1
-        ? `${selectedObjects.length} Objekte`
-        : object.name;
+    nameInput.value = isMultiSelection
+      ? `${selectedObjects.length} Objekte`
+      : object.name;
   }
 
   if (posXInput) posXInput.value = Math.round(object.x);
@@ -494,7 +846,48 @@ function updatePropertiesPanel() {
   if (scaleInput) scaleInput.value = object.scale;
   if (rotationInput) rotationInput.value = object.rotation;
 
-  if (object.type === "label" && selectedObjects.length === 1) {
+  if (isLineObject) {
+    lineProperties.forEach(element => {
+      element.style.display = "flex";
+    });
+
+    if (posX2Input) posX2Input.value = Math.round(object.x2);
+    if (posY2Input) posY2Input.value = Math.round(object.y2);
+    if (strokeWidthInput) strokeWidthInput.value = object.strokeWidth ?? 4;
+    if (strokeColorInput) strokeColorInput.value = object.strokeColor || "#18331f";
+    if (lineStyleSelect) lineStyleSelect.value = object.lineStyle || "solid";
+
+    if (arrowEndInput) {
+      arrowEndInput.checked = object.type === "arrow" || object.arrowEnd;
+    }
+
+    if (detachStartAnchorBtn) {
+      detachStartAnchorBtn.disabled = !object.startAnchorRef;
+    }
+
+    if (detachEndAnchorBtn) {
+      detachEndAnchorBtn.disabled = !object.endAnchorRef;
+    }
+  } else {
+    lineProperties.forEach(element => {
+      element.style.display = "none";
+    });
+
+    if (posX2Input) posX2Input.value = "";
+    if (posY2Input) posY2Input.value = "";
+    if (strokeWidthInput) strokeWidthInput.value = "";
+    if (strokeColorInput) strokeColorInput.value = "#18331f";
+    if (lineStyleSelect) lineStyleSelect.value = "solid";
+
+    if (arrowEndInput) {
+      arrowEndInput.checked = false;
+    }
+
+    if (detachStartAnchorBtn) detachStartAnchorBtn.disabled = true;
+    if (detachEndAnchorBtn) detachEndAnchorBtn.disabled = true;
+  }
+
+  if (isLabelObject && !isMultiSelection) {
     if (textProperty) textProperty.style.display = "flex";
     if (textInput) textInput.value = object.text || "Beschriftung";
   } else {
@@ -509,61 +902,181 @@ function updateLayerPanel() {
 
   list.innerHTML = "";
 
-  const selectedIds = new Set(
-    getSelectedObjects().map(object => object.id)
-  );
+  const objects = objectStore.getAll().slice().reverse();
 
-  objectStore.getAll().slice().reverse().forEach(object => {
-    const row = document.createElement("div");
-    row.className = "layer-row";
+  const grouped = new Map();
+  const ungrouped = [];
 
-    if (selectedIds.has(object.id)) {
-      row.classList.add("is-selected");
-    }
-
-    const name = document.createElement("button");
-    name.className = "layer-name";
-    name.textContent = object.name;
-    name.title = object.name;
-
-    name.addEventListener("click", event => {
-      if (event.shiftKey) {
-        selectionController.toggle(object.id);
-      } else {
-        selectionController.selectOnly(object.id);
+  objects.forEach(object => {
+    if (object.groupId) {
+      if (!grouped.has(object.groupId)) {
+        grouped.set(object.groupId, []);
       }
-    });
 
-    const visible = document.createElement("button");
-    visible.className = "layer-action";
-    visible.innerHTML = object.visible ? '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-eye"></use></svg>' : '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-hidden"></use></svg>';
-    visible.title = "Sichtbarkeit";
-    visible.addEventListener("click", () => {
-      commandManager.execute(
-        new UpdateObjectCommand(objectStore, object.id, {
-          visible: !object.visible
-        })
-      );
-    });
-
-    const locked = document.createElement("button");
-    locked.className = "layer-action";
-    locked.innerHTML = object.locked ? '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-lock"></use></svg>' : '<svg class="icon"><use href="assets/icons/ui-icons.svg#icon-unlock"></use></svg>';
-    locked.title = "Sperren";
-    locked.addEventListener("click", () => {
-      commandManager.execute(
-        new UpdateObjectCommand(objectStore, object.id, {
-          locked: !object.locked
-        })
-      );
-    });
-
-    row.appendChild(name);
-    row.appendChild(visible);
-    row.appendChild(locked);
-
-    list.appendChild(row);
+      grouped.get(object.groupId).push(object);
+    } else {
+      ungrouped.push(object);
+    }
   });
+
+  grouped.forEach((groupObjects, groupId) => {
+    list.appendChild(createGroupLayerRow(groupId, groupObjects));
+  });
+
+  ungrouped.forEach(object => {
+    list.appendChild(createObjectLayerRow(object));
+  });
+}
+
+function createGroupLayerRow(groupId, objects) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "layer-group";
+
+  const header = document.createElement("div");
+  header.className = "layer-group-header";
+
+  const name = document.createElement("button");
+  name.className = "layer-name";
+  const group = groupStore.get(groupId);
+  name.textContent = `▾ ${group?.name || "Gruppe"}`;
+  name.addEventListener("click", () => {
+  groupStore.updateGroup(groupId, {
+    collapsed: !group?.collapsed
+  });
+  name.addEventListener("dblclick", event => {
+  event.stopPropagation();
+
+  const group = groupStore.get(groupId);
+  if (!group) return;
+
+  const newName = prompt("Gruppennamen ändern:", group.name);
+
+  if (newName === null) return;
+
+  groupStore.updateGroup(groupId, {
+    name: newName.trim() || group.name
+  });
+
+  updateLayerPanel();
+});
+
+  updateLayerPanel();
+});
+
+  name.addEventListener("click", () => {
+    objects.forEach(object => {
+      selectionController.toggle(object.id);
+    });
+  });
+
+  const visible = document.createElement("button");
+  visible.className = "layer-action";
+  visible.textContent = "👁";
+
+visible.addEventListener("click", () => {
+  const allVisible = objects.every(object => object.visible);
+  const nextVisible = !allVisible;
+
+  const updates = objects.map(object => ({
+    objectId: object.id,
+    patch: {
+      visible: nextVisible
+    }
+  }));
+
+  commandManager.execute(
+    new UpdateObjectsCommand(objectStore, updates)
+  );
+});
+
+  const locked = document.createElement("button");
+  locked.className = "layer-action";
+  locked.textContent = "🔒";
+
+locked.addEventListener("click", () => {
+  const allLocked = objects.every(object => object.locked);
+  const nextLocked = !allLocked;
+
+  const updates = objects.map(object => ({
+    objectId: object.id,
+    patch: {
+      locked: nextLocked
+    }
+  }));
+
+  commandManager.execute(
+    new UpdateObjectsCommand(objectStore, updates)
+  );
+});
+
+  header.appendChild(name);
+  header.appendChild(visible);
+  header.appendChild(locked);
+
+  const children = document.createElement("div");
+  children.className = "layer-group-children";
+
+  if (group?.collapsed) {
+  children.style.display = "none";
+  name.textContent = `▸ ${group.name}`;
+}
+
+  objects.forEach(object => {
+    children.appendChild(createObjectLayerRow(object));
+  });
+
+  wrapper.appendChild(header);
+  wrapper.appendChild(children);
+
+  return wrapper;
+}
+
+function createObjectLayerRow(object) {
+  const row = document.createElement("div");
+  row.className = "layer-row";
+
+  if (selectionController.selectedIds.has(object.id)) {
+    row.classList.add("is-selected");
+  }
+
+  const name = document.createElement("button");
+  name.className = "layer-name";
+  name.textContent = object.name;
+  name.title = object.name;
+
+  name.addEventListener("click", () => {
+    selectionController.selectOnly(object.id);
+  });
+
+  const visible = document.createElement("button");
+  visible.className = "layer-action";
+  visible.textContent = object.visible ? "👁" : "—";
+
+  visible.addEventListener("click", () => {
+    commandManager.execute(
+      new UpdateObjectCommand(objectStore, object.id, {
+        visible: !object.visible
+      })
+    );
+  });
+
+  const locked = document.createElement("button");
+  locked.className = "layer-action";
+  locked.textContent = object.locked ? "🔒" : "🔓";
+
+  locked.addEventListener("click", () => {
+    commandManager.execute(
+      new UpdateObjectCommand(objectStore, object.id, {
+        locked: !object.locked
+      })
+    );
+  });
+
+  row.appendChild(name);
+  row.appendChild(visible);
+  row.appendChild(locked);
+
+  return row;
 }
 
 function updateStatusBar() {
@@ -572,6 +1085,20 @@ function updateStatusBar() {
   const selectedStatus = document.getElementById("selectedStatus");
   const gridStatus = document.getElementById("gridStatus");
   const snapStatus = document.getElementById("snapStatus");
+  const smartStatus = document.getElementById("smartGuideStatus");
+  const anchorSnapStatus = document.getElementById("anchorSnapStatus");
+
+if (anchorSnapStatus) {
+  anchorSnapStatus.textContent = anchorSnapController.isEnabled()
+    ? "Anchor: an"
+    : "Anchor: aus";
+}
+
+if (smartStatus) {
+  smartStatus.textContent = smartGuideController.isEnabled()
+    ? "Guides: an"
+    : "Guides: aus";
+}
 
   if (selectedStatus) {
     if (selectedObjects.length === 0) {
@@ -621,6 +1148,7 @@ function editLabelText(objectId) {
 function saveProject() {
   const data = {
     version: "2.0",
+    groups: groupStore.getAll(),
     objects: objectStore.getAll().map(object => object.toJSON())
   };
 
@@ -645,7 +1173,9 @@ async function loadProjectFile(event) {
   try {
     const text = await file.text();
     const data = JSON.parse(text);
+
     const objects = data.objects || data;
+    const groups = data.groups || [];
 
     const recreatedObjects = [];
 
@@ -654,7 +1184,9 @@ async function loadProjectFile(event) {
       recreatedObjects.push(object);
     }
 
+    groupStore.replaceAll(groups);
     objectStore.replaceAll(recreatedObjects);
+
     commandManager.clear();
     selectionController.clear();
   } catch (error) {
@@ -797,6 +1329,12 @@ function handleShortcuts(event) {
     event.preventDefault();
     toggleVisibilitySelected();
   }
+
+  if (event.key === "Escape") {
+  event.preventDefault();
+  toolManager.activateSelectTool();
+  return;
+}
 }
 
 function safeNumber(value, fallback) {
@@ -815,4 +1353,36 @@ function setButtonDisabled(id, disabled) {
   if (button) {
     button.disabled = disabled;
   }
+}
+
+function groupSelected() {
+  const objects = getSelectedObjects()
+    .filter(object => !object.locked);
+
+  if (objects.length < 2) return;
+
+  const name = prompt("Name der Gruppe:", "Neue Gruppe") || "Neue Gruppe";
+
+  commandManager.execute(
+    new GroupObjectsCommand(objectStore, groupStore, objects, name)
+  );
+}
+
+function ungroupSelected() {
+  const objects = getSelectedObjects()
+    .filter(object => object.groupId && !object.locked);
+
+  if (objects.length === 0) return;
+
+  commandManager.execute(
+    new UngroupObjectsCommand(objectStore, objects)
+  );
+}
+
+function setActive(id, isActive) {
+  const button = document.getElementById(id);
+
+  if (!button) return;
+
+  button.classList.toggle("is-active", isActive);
 }

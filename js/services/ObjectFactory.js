@@ -17,21 +17,22 @@ export class ObjectFactory {
         ? ""
         : await this.libraryService.getSvgContent(item);
 
-    return new LabObject({
-      type: item.id,
-      name: item.label,
-      x: options.x ?? 350,
-      y: options.y ?? 200,
-      scale: options.scale ?? 1,
-      rotation: options.rotation ?? 0,
-      text: item.id === "label" ? "Beschriftung" : "",
-      path: item.path || "",
-      station: item.station || "",
-      tags: item.tags || [],
-      metadata: {
-        svgContent
-      }
-    });
+      return new LabObject({
+        type: item.id,
+        name: item.label,
+        x: options.x ?? 350,
+        y: options.y ?? 200,
+        scale: options.scale ?? 1,
+        rotation: options.rotation ?? 0,
+        text: item.id === "label" ? "Beschriftung" : "",
+        path: item.path || "",
+        station: item.station || "",
+        tags: item.tags || [],
+        anchorPoints: item.anchorPoints || [],
+        metadata: {
+          svgContent
+        }
+      });
   }
 
   async recreateFromProjectData(data) {

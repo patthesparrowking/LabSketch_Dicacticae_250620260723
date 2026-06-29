@@ -1,53 +1,113 @@
-import { AlignObjectCommand } from "../commands/AlignObjectCommand.js";
+import { AlignObjectsCommand } from "../commands/AlignObjectsCommand.js";
 
 export class AlignController {
-  constructor({ objectStore, commandManager, getSelectedObject }) {
+  constructor({ objectStore, commandManager, getSelectedObjects }) {
     this.objectStore = objectStore;
     this.commandManager = commandManager;
-    this.getSelectedObject = getSelectedObject;
+    this.getSelectedObjects = getSelectedObjects;
 
     this.canvasWidth = 1000;
     this.canvasHeight = 700;
   }
 
   alignLeft() {
-    this.align({ x: 0 });
+    this.alignGroup({ x: 0 });
   }
 
   alignCenterX() {
-    this.align({ x: this.canvasWidth / 2 });
+    const bounds = this.getSelectionBounds();
+    if (!bounds) return;
+
+    const targetCenter = this.canvasWidth / 2;
+    const currentCenter = bounds.x + bounds.width / 2;
+    const dx = targetCenter - currentCenter;
+
+    this.moveSelection(dx, 0);
   }
 
   alignRight() {
-    this.align({ x: this.canvasWidth });
+    const bounds = this.getSelectionBounds();
+    if (!bounds) return;
+
+    const dx = this.canvasWidth - (bounds.x + bounds.width);
+    this.moveSelection(dx, 0);
   }
 
   alignTop() {
-    this.align({ y: 0 });
+    this.alignGroup({ y: 0 });
   }
 
   alignCenterY() {
-    this.align({ y: this.canvasHeight / 2 });
+    const bounds = this.getSelectionBounds();
+    if (!bounds) return;
+
+    const targetCenter = this.canvasHeight / 2;
+    const currentCenter = bounds.y + bounds.height / 2;
+    const dy = targetCenter - currentCenter;
+
+    this.moveSelection(0, dy);
   }
 
   alignBottom() {
-    this.align({ y: this.canvasHeight });
+    const bounds = this.getSelectionBounds();
+    if (!bounds) return;
+
+    const dy = this.canvasHeight - (bounds.y + bounds.height);
+    this.moveSelection(0, dy);
   }
 
-  align(patch) {
-    const object = this.getSelectedObject();
-    if (!object || object.locked) return;
+  alignGroup(target) {
+    const bounds = this.getSelectionBounds();
+    if (!bounds) return;
+
+    const dx = target.x !== undefined ? target.x - bounds.x : 0;
+    const dy = target.y !== undefined ? target.y - bounds.y : 0;
+
+    this.moveSelection(dx, dy);
+  }
+
+  moveSelection(dx, dy) {
+    const objects = this.getSelectedObjects()
+      .filter(object => !object.locked);
+
+    if (objects.length === 0) return;
+
+    const moves = objects.map(object => ({
+      objectId: object.id,
+      from: {
+        x: object.x,
+        y: object.y
+      },
+      to: {
+        x: object.x + dx,
+        y: object.y + dy
+      }
+    }));
 
     this.commandManager.execute(
-      new AlignObjectCommand(
-        this.objectStore,
-        object.id,
-        { x: object.x, y: object.y },
-        {
-          x: patch.x ?? object.x,
-          y: patch.y ?? object.y
-        }
-      )
+      new AlignObjectsCommand(this.objectStore, moves)
     );
+  }
+
+  getSelectionBounds() {
+    const objects = this.getSelectedObjects()
+      .filter(object => !object.locked);
+
+    if (objects.length === 0) return null;
+
+    const xs = objects.map(object => object.x);
+    const ys = objects.map(object => object.y);
+
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+
+    return {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    };
   }
 }

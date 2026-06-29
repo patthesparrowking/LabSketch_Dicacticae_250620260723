@@ -23,6 +23,73 @@
 //   }
 // ];
 
+// export const svgLibrary = [
+//   {
+//     id: "label",
+//     label: "Beschriftung",
+//     station: "Werkzeuge",
+//     tags: ["text", "label", "beschriftung"],
+//     anchorPoints: [
+//       { id: "left", label: "Links", x: -10, y: -12, type: "connector" },
+//       { id: "right", label: "Rechts", x: 160, y: -12, type: "connector" }
+//     ]
+//   },
+
+//   {
+//     id: "pipette",
+//     label: "Pipette",
+//     station: "Laborgeräte",
+//     path: "assets/svg/pipette.svg",
+//     tags: ["pipette", "labor", "flüssigkeit"],
+//     anchorPoints: [
+//       { id: "tip", label: "Spitze", x: 50, y: 180, type: "connector" },
+//       { id: "top", label: "Oberes Ende", x: 50, y: 10, type: "connector" },
+//       { id: "center", label: "Mitte", x: 50, y: 95, type: "center" }
+//     ]
+//   },
+
+//   {
+//     id: "becherglas",
+//     label: "Becherglas",
+//     station: "Glaswaren",
+//     path: "assets/svg/becherglas.svg",
+//     tags: ["glas", "becher", "chemie"],
+//     anchorPoints: [
+//       { id: "rim-left", label: "Rand links", x: 20, y: 25, type: "connector" },
+//       { id: "rim-right", label: "Rand rechts", x: 80, y: 25, type: "connector" },
+//       { id: "surface", label: "Flüssigkeitsoberfläche", x: 50, y: 65, type: "connector" },
+//       { id: "center", label: "Mitte", x: 50, y: 90, type: "center" }
+//     ]
+//   },
+
+//   {
+//     id: "testtube",
+//     label: "Reagenzglas",
+//     station: "Glaswaren",
+//     path: "assets/svg/testtube.svg",
+//     tags: ["reagenzglas", "glas", "probe"],
+//     anchorPoints: [
+//       { id: "opening", label: "Öffnung", x: 50, y: 10, type: "connector" },
+//       { id: "middle", label: "Mitte", x: 50, y: 100, type: "center" },
+//       { id: "bottom", label: "Boden", x: 50, y: 190, type: "connector" },
+//       { id: "liquid", label: "Flüssigkeitsstand", x: 50, y: 90, type: "connector" }
+//     ]
+//   },
+
+//   {
+//     id: "microscope",
+//     label: "Mikroskop",
+//     station: "Mikroskopie",
+//     path: "assets/svg/microscope.svg",
+//     tags: ["mikroskop", "mikroskopie", "biologie"],
+//     anchorPoints: [
+//       { id: "stage", label: "Objekttisch", x: 105, y: 120, type: "connector" },
+//       { id: "eyepiece", label: "Okular", x: 75, y: 35, type: "connector" },
+//       { id: "base", label: "Fuß", x: 110, y: 185, type: "connector" }
+//     ]
+//   }
+// ];
+
 export const svgLibrary = [
   {
     id: "Material",
@@ -34,7 +101,14 @@ export const svgLibrary = [
     id: "Daphnien_Becherglas",
     label: "Daphnien (Becherglas)",
     station: "Checkpoint Beta",
-    path: "assets/svg/Daphnien_Becherglas.svg"
+    path: "assets/svg/Daphnien_Becherglas.svg",
+    tags: ["glas", "becher", "chemie"],
+    anchorPoints: [
+      { id: "rim-left", label: "Rand links", x: 20, y: 25, type: "connector" },
+      { id: "rim-right", label: "Rand rechts", x: 80, y: 25, type: "connector" },
+      { id: "surface", label: "Flüssigkeitsoberfläche", x: 50, y: 65, type: "connector" },
+      { id: "center", label: "Mitte", x: 50, y: 90, type: "center" }
+    ]
   },
   {
     id: "Taschenlampe_UV",
@@ -58,7 +132,13 @@ export const svgLibrary = [
     id: "Stereomikroskop",
     label: "Stereomikroskop",
     station: "Checkpoint Beta",
-    path: "assets/svg/Stereomikroskop.svg"
+    path: "assets/svg/Stereomikroskop.svg",
+    tags: ["mikroskop", "mikroskopie", "biologie"],
+    anchorPoints: [
+      { id: "stage", label: "Objekttisch", x: 105, y: 120, type: "connector" },
+      { id: "eyepiece", label: "Okular", x: 75, y: 35, type: "connector" },
+      { id: "base", label: "Fuß", x: 110, y: 185, type: "connector" }
+    ]
   },
   {
     id: "Schnappdeckelglas_Suspension",
@@ -70,7 +150,13 @@ export const svgLibrary = [
     id: "Pipette",
     label: "Pipette",
     station: "Checkpoint Beta",
-    path: "assets/svg/Pipette.svg"
+    path: "assets/svg/Pipette.svg",
+    tags: ["pipette", "labor", "flüssigkeit"],
+    anchorPoints: [
+      { id: "tip", label: "Spitze", x: 50, y: 180, type: "connector" },
+      { id: "top", label: "Oberes Ende", x: 50, y: 10, type: "connector" },
+      { id: "center", label: "Mitte", x: 50, y: 95, type: "center" }
+    ]
   },
   {
     id: "Uhrglas",
@@ -94,7 +180,13 @@ export const svgLibrary = [
     id: "Mikroskop (Invers)",
     label: "Mikroskop (Invers)",
     station: "Checkpoint Beta",
-    path: "assets/svg/Inverses_Mikroskop.svg"
+    path: "assets/svg/Inverses_Mikroskop.svg",
+    tags: ["mikroskop", "mikroskopie", "biologie"],
+    anchorPoints: [
+      { id: "stage", label: "Objekttisch", x: 105, y: 120, type: "connector" },
+      { id: "eyepiece", label: "Okular", x: 75, y: 35, type: "connector" },
+      { id: "base", label: "Fuß", x: 110, y: 185, type: "connector" }
+    ]
   },
   {
     id: "Mikrotom",
@@ -130,7 +222,13 @@ export const svgLibrary = [
     id: "Stereomikroskop",
     label: "Stereomikroskop",
     station: "Checkpoint Beta",
-    path: "assets/svg/Stereomikroskop.svg"
+    path: "assets/svg/Stereomikroskop.svg",
+    tags: ["mikroskop", "mikroskopie", "biologie"],
+    anchorPoints: [
+      { id: "stage", label: "Objekttisch", x: 105, y: 120, type: "connector" },
+      { id: "eyepiece", label: "Okular", x: 75, y: 35, type: "connector" },
+      { id: "base", label: "Fuß", x: 110, y: 185, type: "connector" }
+    ]
   },
   {
     id: "Schnappdeckelglas_Wasser",
@@ -160,13 +258,26 @@ export const svgLibrary = [
     id: "Stereomikroskop",
     label: "Stereomikroskop",
     station: "Checkpoint Beta",
-    path: "assets/svg/Stereomikroskop.svg"
+    path: "assets/svg/Stereomikroskop.svg",
+    tags: ["mikroskop", "mikroskopie", "biologie"],
+    anchorPoints: [
+      { id: "stage", label: "Objekttisch", x: 105, y: 120, type: "connector" },
+      { id: "eyepiece", label: "Okular", x: 75, y: 35, type: "connector" },
+      { id: "base", label: "Fuß", x: 110, y: 185, type: "connector" }
+    ]
   },
   {
     id: "Reagenzglas_Paramecium",
     label: "Reagenzglas (Paramecium)",
     station: "Checkpoint Beta",
-    path: "assets/svg/Reagenzglas_Paramecium.svg"
+    path: "assets/svg/Reagenzglas_Paramecium.svg",
+    tags: ["reagenzglas", "glas", "probe"],
+    anchorPoints: [
+      { id: "opening", label: "Öffnung", x: 50, y: 10, type: "connector" },
+      { id: "middle", label: "Mitte", x: 50, y: 100, type: "center" },
+      { id: "bottom", label: "Boden", x: 50, y: 190, type: "connector" },
+      { id: "liquid", label: "Flüssigkeitsstand", x: 50, y: 90, type: "connector" }
+    ]
   },
   // {
   //   id: "Petrischale_Amöben",
@@ -213,7 +324,13 @@ export const svgLibrary = [
     id: "Stereomikroskop",
     label: "Stereomikroskop",
     station: "Checkpoint Beta",
-    path: "assets/svg/Stereomikroskop.svg"
+    path: "assets/svg/Stereomikroskop.svg",
+    tags: ["mikroskop", "mikroskopie", "biologie"],
+    anchorPoints: [
+      { id: "stage", label: "Objekttisch", x: 105, y: 120, type: "connector" },
+      { id: "eyepiece", label: "Okular", x: 75, y: 35, type: "connector" },
+      { id: "base", label: "Fuß", x: 110, y: 185, type: "connector" }
+    ]
   },
     {
     id: "Durchlicht_Mikroskop",
@@ -243,7 +360,14 @@ export const svgLibrary = [
     id: "Reagenzglas_Leer",
     label: "Reagenzglas (Leer)",
     station: "Checkpoint Gamma",
-    path: "assets/svg/Reagenzglas_Leer.svg"
+    path: "assets/svg/Reagenzglas_Leer.svg",
+    tags: ["reagenzglas", "glas", "probe"],
+    anchorPoints: [
+      { id: "opening", label: "Öffnung", x: 50, y: 10, type: "connector" },
+      { id: "middle", label: "Mitte", x: 50, y: 100, type: "center" },
+      { id: "bottom", label: "Boden", x: 50, y: 190, type: "connector" },
+      { id: "liquid", label: "Flüssigkeitsstand", x: 50, y: 90, type: "connector" }
+    ]
   },
   {
     id: "Holzspieß",
@@ -296,6 +420,11 @@ export const svgLibrary = [
   id: "label",
   label: "Beschriftung",
   station: "Werkzeuge",
-  icon: "assets/icons/text.svg"
+  icon: "assets/icons/text.svg",
+    tags: ["text", "label", "beschriftung"],
+    anchorPoints: [
+      { id: "left", label: "Links", x: -10, y: -12, type: "connector" },
+      { id: "right", label: "Rechts", x: 160, y: -12, type: "connector" }
+    ]
 }
 ];

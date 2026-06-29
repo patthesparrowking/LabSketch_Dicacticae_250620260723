@@ -62,8 +62,7 @@
 }
 
 .selected {
-  outline: 2px dashed var(--color-accent);
-  outline-offset: 6px;
+  outline: none;
 }
 
 .is-locked {
@@ -73,4 +72,241 @@
 
 .is-locked.selected {
   outline: 2px dashed #8f7b4f;
+}
+
+.arrow-preview {
+  pointer-events: none;
+}
+
+.arrow-preview-line {
+  stroke: var(--color-primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 8 6;
+  opacity: 0.75;
+}
+
+.arrow-preview-head {
+  fill: var(--color-primary);
+  opacity: 0.75;
+}
+
+.arrow-handles {
+  pointer-events: all;
+}
+
+.arrow-handles circle {
+  fill: var(--color-accent);
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  cursor: grab;
+}
+
+.arrow-handles circle:active {
+  cursor: grabbing;
+}
+
+.line-preview {
+  pointer-events: none;
+  stroke: var(--color-primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 8 6;
+  opacity: 0.75;
+}
+
+.selection-handles {
+  pointer-events: none;
+}
+
+.selection-bounds {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-dasharray: 8 6;
+}
+
+.selection-handle {
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+
+.selection-handles {
+  pointer-events: none;
+}
+
+.selection-handle {
+  pointer-events: all;
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  cursor: nwse-resize;
+}
+
+.rotation-handle {
+  cursor: grab;
+  fill: var(--color-accent);
+}
+
+.rotation-handle:active {
+  cursor: grabbing;
+}
+
+.rotation-line {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  pointer-events: none;
+}
+
+.selection-box {
+  fill: rgba(225, 178, 75, 0.18);
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  pointer-events: none;
+}
+
+.smart-guides {
+  pointer-events: none;
+}
+
+.smart-guides line {
+  stroke: #d64fa3;
+  stroke-width: 2;
+  stroke-dasharray: 6 5;
+}
+
+.smart-guides .spacing-guide {
+  stroke: #7a5cff;
+  stroke-width: 2;
+  stroke-dasharray: 3 4;
+}
+
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.setting-row select {
+  min-height: 40px;
+  border: 1px solid rgba(175, 150, 92, 0.65);
+  border-radius: var(--radius-sm);
+  background: white;
+  color: var(--color-text);
+  padding: 8px;
+}
+
+.anchor-points {
+  pointer-events: none;
+}
+
+.anchor-point {
+  fill: var(--color-accent);
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+
+.anchor-snap-preview {
+  pointer-events: none;
+}
+
+.anchor-snap-preview line {
+  stroke: #d64fa3;
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+
+.anchor-snap-preview circle {
+  fill: rgba(214, 79, 163, 0.2);
+  stroke: #d64fa3;
+  stroke-width: 2;
+}
+
+.selection-bounds {
+  vector-effect: non-scaling-stroke;
+}
+
+.selection-handle {
+  vector-effect: non-scaling-stroke;
+}
+
+.rotation-line {
+  vector-effect: non-scaling-stroke;
+}
+
+.selection-bounds,
+.selection-handle,
+.rotation-line {
+  vector-effect: non-scaling-stroke;
+}
+
+.selection-handle {
+  transform-box: fill-box;
+}
+
+.selection-bounds,
+.selection-handle,
+.rotation-line {
+  vector-effect: non-scaling-stroke;
+}
+
+.selection-handle {
+  pointer-events: all;
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+
+.selection-bounds {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-dasharray: 8 6;
+}
+
+.arrow-handles circle {
+  vector-effect: non-scaling-stroke;
+}
+
+.arrow-handles circle.is-attached {
+    fill: #3BA55D;
+    stroke: #ffffff;
+    stroke-width: 2.5;
+}
+
+.arrow-handles circle.is-attached::after {
+  content: "";
+}
+
+.arrow-handles .handle-start {
+    fill: #ffffff;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+}
+
+.arrow-handles .handle-end {
+    fill: var(--color-primary);
+    stroke: #ffffff;
+    stroke-width: 2;
+}
+
+.anchor-highlight-layer {
+  pointer-events: none;
+}
+
+.anchor-highlight {
+  fill: rgba(225, 178, 75, 0.22);
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.anchor-highlight.is-active {
+  fill: rgba(59, 165, 93, 0.28);
+  stroke: #3ba55d;
+  stroke-width: 3;
 }

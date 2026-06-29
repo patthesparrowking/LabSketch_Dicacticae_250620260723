@@ -27,8 +27,8 @@
             <div class="topbar-actions">
                 <button id="saveProjectBtn" class="icon-btn" title="Projekt speichern" aria-label="Projekt speichern"> <svg class="icon"><use href="assets/icons/ui-icons.svg#icon-save"></use></svg></button>
                 <button id="loadProjectBtn" class="icon-btn" title="Projekt laden" aria-label="Projekt laden"> <svg class="icon"><use href="assets/icons/ui-icons.svg#icon-open"></use></svg></button>
-                <button id="exportSvgBtn" class="icon-btn" title="SVG exportieren" aria-label="SVG exportieren"> <svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export"></use></svg></button>
-                <button id="exportPngBtn" class="icon-btn primary" title="PNG exportieren" aria-label="PNG exportieren"> PNG</button>
+                <button id="exportSvgBtn" class="icon-btn" title="SVG exportieren" aria-label="SVG exportieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export-svg"></use></svg></button>
+                <button id="exportPngBtn" class="icon-btn primary" title="PNG exportieren" aria-label="PNG exportieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export-png"></use></svg></button>
                 <input id="loadProjectInput" type="file" accept=".json" hidden>
             </div>
         </header>
@@ -67,16 +67,20 @@
                     <button id="visibilityBtn" class="icon-btn" title="Sichtbarkeit" aria-label="Sichtbarkeit"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-eye"></use></svg></button>
                     <button id="toggleGridBtn" class="icon-btn is-active" title="Raster" aria-label="Raster"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-grid"></use></svg></button>
                     <button id="toggleSnapBtn" class="icon-btn is-active" title="Snap" aria-label="Snap"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-snap"></use></svg></button>
-                    <button id="saveProjectBtn" class="icon-btn" title="Projekt speichern" aria-label="Projekt speichern"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-save"></use></svg></button>
-                    <button id="loadProjectBtn" class="icon-btn" title="Projekt laden" aria-label="Projekt laden"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-open"></use></svg></button>
-                    <button id="exportSvgBtn" class="icon-btn" title="SVG exportieren" aria-label="SVG exportieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export-svg"></use></svg></button>
-                    <button id="exportPngBtn" class="icon-btn" title="PNG exportieren" aria-label="PNG exportieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-export-png"></use></svg></button>
                     <button id="alignLeftBtn" class="icon-btn" title="Links ausrichten" aria-label="Links ausrichten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-left"></use></svg></button>
                     <button id="alignCenterXBtn" class="icon-btn" title="Horizontal zentrieren" aria-label="Horizontal zentrieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-center-x"></use></svg></button>
                     <button id="alignRightBtn" class="icon-btn" title="Rechts ausrichten" aria-label="Rechts ausrichten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-right"></use></svg></button>
                     <button id="alignTopBtn" class="icon-btn" title="Oben ausrichten" aria-label="Oben ausrichten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-top"></use></svg></button>
                     <button id="alignCenterYBtn" class="icon-btn" title="Vertikal zentrieren" aria-label="Vertikal zentrieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-center-y"></use></svg></button>
                     <button id="alignBottomBtn" class="icon-btn" title="Unten ausrichten" aria-label="Unten ausrichten"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-bottom"></use></svg></button>
+                    <button id="distributeHorizontalBtn" class="icon-btn" title="Horizontal verteilen" aria-label="Horizontal verteilen">⇔</button>
+                    <button id="distributeVerticalBtn" class="icon-btn" title="Vertikal verteilen" aria-label="Vertikal verteilen">⇕</button>
+                    <button id="groupBtn" class="icon-btn" title="Gruppieren" aria-label="Gruppieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-group"></use></svg></button>
+                    <button id="ungroupBtn" class="icon-btn" title="Gruppe auflösen" aria-label="Gruppe auflösen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-ungroup"></use></svg></button>
+                    <button id="toggleAnchorSnapBtn" class="icon-btn is-active" title="Anchor Snap" aria-label="Anchor Snap"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-anchor"></use></svg></button>
+                    <button id="lineToolBtn" class="icon-btn" title="Linie zeichnen" aria-label="Linie zeichnen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-line"></use></svg></button>
+                    <button id="arrowToolBtn" class="icon-btn" title="Pfeil zeichnen" aria-label="Pfeil zeichnen"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-arrow"></use></svg></button>
+                    <button id="toggleSmartGuidesBtn" class="icon-btn is-active" title="Smart Guides" aria-label="Smart Guides">✨</button>
                 </div>
 
                 <div class="pocket-canvas-toolbar">
@@ -106,6 +110,8 @@
                     <span id="selectedStatus">Ausgewählt: nichts</span>
                     <span id="gridStatus">Raster: an</span>
                     <span id="snapStatus">Snap: an</span>
+                    <span id="smartGuideStatus">Guides: an</span>
+                    <span id="anchorSnapStatus">Anchor: an</span>
                 </div>
             </section>
 
@@ -135,7 +141,22 @@
                     <label> Y <input id="posYInput" type="number"></label>
                     <label> Größe <input id="scaleInput" type="number" step="0.1" min="0.1"></label>
                     <label> Rotation <input id="rotationInput" type="number"></label>
+                    <label class="line-property">X2<input id="posX2Input" type="number"></label>
+                    <label class="line-property">Y2<input id="posY2Input" type="number"></label>
+                    <label class="line-property">Linie<input id="strokeWidthInput" type="number" min="1" step="1"></label>
+                    <label class="line-property">Farbe<input id="strokeColorInput" type="color"></label>
                     <label id="textProperty" class="full"> Text <input id="textInput" type="text"></label>
+                    <button id="detachStartAnchorBtn" class="btn line-property">Start lösen</button>
+                    <button id="detachEndAnchorBtn" class="btn line-property">Ende lösen</button>
+                    <label class="line-property">
+                        Stil
+                        <select id="lineStyleSelect">
+                            <option value="solid">Durchgezogen</option>
+                            <option value="dashed">Gestrichelt</option>
+                            <option value="dotted">Gepunktet</option>
+                        </select>
+                    </label>
+                    <label class="line-property">Pfeilspitze<input id="arrowEndInput" type="checkbox"></label>
                 </div>
 
                 <div class="layers-panel" id="layersPanel">
@@ -149,6 +170,25 @@
                     <span class="sheet-handle"></span>
                     <button class="sheet-close" data-close-sheet>×</button>
                 </div>
+
+                <label class="setting-row">
+                    Guide-Toleranz
+                    <select id="guideThresholdSelect">
+                        <option value="4">4</option>
+                        <option value="8" selected>8</option>
+                        <option value="12">12</option>
+                        <option value="16">16</option>
+                    </select>
+                </label>
+
+                <label class="setting-row">
+                Rastergröße
+                <select id="gridSizeSelect">
+                    <option value="10">10</option>
+                    <option value="25" selected>25</option>
+                    <option value="50">50</option>
+                </select>
+                </label>
 
                 <div class="panel-header">
                     <h2>Mehr</h2>
@@ -164,9 +204,10 @@
                     <button id="mobileSnapBtn" class="icon-btn is-active" title="Snap" aria-label="Snap"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-snap"></use></svg></button>
                     <button id="mobileAlignCenterXBtn" class="icon-btn" title="Horizontal zentrieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-center-x"></use></svg></button>
                     <button id="mobileAlignCenterYBtn" class="icon-btn" title="Vertikal zentrieren"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-align-center-y"></use></svg></button>
+                    <button id="mobileAnchorSnapBtn" class="icon-btn is-active" title="Anchor Snap" aria-label="Anchor Snap"><svg class="icon"><use href="assets/icons/ui-icons.svg#icon-anchor"></use></svg></button>
+                    <button id="mobileSmartGuidesBtn" class="icon-btn is-active" title="Smart Guides" aria-label="Smart Guides"></button>
                 </div>
             </aside>
-
         </main>
 
         <nav class="pocket-dock">

@@ -13,6 +13,17 @@ export class LabObject {
     path = "",
     station = "",
     tags = [],
+    groupId = null,
+    x2 = 500,
+y2 = 300,
+strokeWidth = 3,
+strokeColor = "#18331f",
+arrowEnd = false,
+anchorPoints = [],
+startAnchorRef = null,
+endAnchorRef = null,
+strokeDasharray = "",
+lineStyle = "solid",
     metadata = {}
   }) {
     this.id = id;
@@ -31,6 +42,17 @@ export class LabObject {
     this.path = path;
     this.station = station;
     this.tags = tags;
+    this.groupId = groupId;
+    this.x2 = x2;
+this.y2 = y2;
+this.strokeWidth = strokeWidth;
+this.strokeColor = strokeColor;
+this.arrowEnd = arrowEnd;
+this.anchorPoints = anchorPoints;
+this.startAnchorRef = startAnchorRef;
+this.endAnchorRef = endAnchorRef;
+this.strokeDasharray = strokeDasharray;
+this.lineStyle = lineStyle;
     this.metadata = metadata;
 
     this.element = null;
@@ -51,6 +73,17 @@ export class LabObject {
       path: this.path,
       station: this.station,
       tags: this.tags,
+      groupId: this.groupId,
+      x2: this.x2,
+y2: this.y2,
+strokeWidth: this.strokeWidth,
+strokeColor: this.strokeColor,
+arrowEnd: this.arrowEnd,
+anchorPoints: this.anchorPoints,
+startAnchorRef: this.startAnchorRef,
+endAnchorRef: this.endAnchorRef,
+strokeDasharray: this.strokeDasharray,
+lineStyle: this.lineStyle,
       metadata: this.metadata
     };
   }
